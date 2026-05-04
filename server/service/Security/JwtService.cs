@@ -27,7 +27,7 @@ public class JwtService(IConfiguration config) : ITokenService
             ),
             Subject = new ClaimsIdentity(user.ToClaims()),
             // TODO : Huske at ændre dette på et tidspunkt
-            Expires = DateTime.UtcNow.AddDays(7),
+            Expires = DateTime.UtcNow.AddDays(1),
         };
         var tokenHandler = new JsonWebTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);

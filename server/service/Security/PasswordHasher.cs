@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using dataaccess.Entities;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 

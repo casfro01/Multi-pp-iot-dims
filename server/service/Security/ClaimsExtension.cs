@@ -9,7 +9,7 @@ public static class ClaimsExtension
         claims.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
     public static IEnumerable<Claim> ToClaims(this AuthUserInfo user) =>
-        [new("sub", user.Id.ToString()), new("role", user.Role)];
+        [new("sub", user.Id)];
 
     public static ClaimsPrincipal ToPrincipal(this AuthUserInfo user) =>
         new ClaimsPrincipal(new ClaimsIdentity(user.ToClaims()));

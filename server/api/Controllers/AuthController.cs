@@ -1,4 +1,5 @@
 ﻿using System.Runtime.ExceptionServices;
+using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,9 @@ public class AuthController(IAuthService service, ITokenService tokenService, IS
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
-    public async Task<LoginResponse> Login([FromBody] LoginRequest request)
+    public async Task<LoginResponse> Login([FromBody]LoginRequest request)
     {
-        var userInfo = service.Authenticate(request);
+        var userInfo = await service.Authenticate(request);
         var token = tokenService.CreateToken(userInfo);
         return new LoginResponse(token);
     }
@@ -27,7 +28,7 @@ public class AuthController(IAuthService service, ITokenService tokenService, IS
     [HttpPost]
     [Route("register")]
     [AllowAnonymous]
-    public async Task<RegisterResponse> Register([FromBody] RegisterRequest request)
+    public async Task<RegisterResponse> Register([FromBody]RegisterRequest request)
     {
         var userInfo = await service.Register(request);
         return new RegisterResponse(UserName: userInfo.UserName);
@@ -44,11 +45,13 @@ public class AuthController(IAuthService service, ITokenService tokenService, IS
     [Route("userinfo")]
     public async Task<AuthUserInfo?> UserInfo()
     {
-        return service.GetUserInfo(User);
+        var userID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return await service.GetUserInfo(userID);
     }
     
     
     [HttpGet("sse")]
+    [Authorize]
     public async Task Connect()
     {
         AuthController realtimeControllerBase = this;

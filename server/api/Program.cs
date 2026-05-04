@@ -1,6 +1,7 @@
 
 using System.Text.Json.Serialization;
 using dataaccess;
+using dataaccess.Entities;
 using DataAccess.Entities;
 using DefaultNamespace;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -39,6 +40,7 @@ public class Program
         //services.AddScoped<ISeeder, BogusSeed>();
         //services.AddScoped<ISeeder, SimpleSeeder>();
         services.AddProblemDetails();
+        services.AddExceptionHandler<GlobalExceptionHandler>();
         
         services.AddDbContext<MyDbContext>((services, options) =>
         {

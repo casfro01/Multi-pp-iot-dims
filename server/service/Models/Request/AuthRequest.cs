@@ -3,10 +3,8 @@
 namespace service.Models.Request;
 
 public record RegisterRequest(
-    [Required] string Email,
     [Required] string UserName,
-    [MinLength(6)] string Password,
-    [Required] string Name
+    [Required] [MinLength(6)] string Password
 );
 
-public record LoginRequest([Required] string Email, [Required] string Password);
+public record LoginRequest([Required] string UserName, [Required] string Password);
