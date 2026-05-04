@@ -1,0 +1,124 @@
+.qresult-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+}
+
+.qresult-page__container {
+  width: 100%;
+  max-width: 56rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.qresult-header {
+  text-align: center;
+}
+
+.qresult-header__eyebrow {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.qresult-header__title {
+  margin: 0.5rem 0 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+.qresult-header__answer {
+  color: var(--answer-green);
+}
+
+.qresult-chart {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.25rem;
+  padding: 1.5rem 1.5rem 1.25rem;
+  backdrop-filter: blur(8px);
+}
+
+.qresult-chart__title {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.qresult-chart__bars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  height: 14rem;
+  align-items: end;
+}
+
+.qresult-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.qresult-bar__count {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.qresult-bar__fill {
+  width: 100%;
+  border-radius: 0.65rem 0.65rem 0 0;
+  min-height: 8px;
+  transition: height 0.4s ease;
+}
+
+.qresult-bar--correct .qresult-bar__fill {
+  outline: 4px solid #fff;
+  outline-offset: -1px;
+}
+
+.qresult-bar__label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.qresult-chart__total {
+  margin: 1rem 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.qresult-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.qresult-button {
+  background: var(--color-secondary);
+  color: var(--text-on-light);
+  border: none;
+  border-radius: 0.85rem;
+  padding: 0.95rem 2.5rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.qresult-button:hover {
+  background: var(--color-secondary-dark);
+  transform: translateY(-2px);
+}
