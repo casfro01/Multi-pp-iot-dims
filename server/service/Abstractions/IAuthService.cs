@@ -6,8 +6,8 @@ namespace service.Abstractions;
 
 public interface IAuthService
 {
-    AuthUserInfo Authenticate(LoginRequest request);
+    Task<AuthUserInfo> Authenticate(LoginRequest request);
     Task<AuthUserInfo> Register(RegisterRequest request);
     
-    AuthUserInfo? GetUserInfo(ClaimsPrincipal principal);
+    Task<AuthUserInfo?> GetUserInfo(String id);
 }
