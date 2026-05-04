@@ -161,6 +161,17 @@ export class AuthClient {
         }
         return Promise.resolve<AuthUserInfo>(null as any);
     }
+}
+
+export class SubscriberClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
 
     connect(): Promise<void> {
         let url_ = this.baseUrl + "/api/auth/sse";

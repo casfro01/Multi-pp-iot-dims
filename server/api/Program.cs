@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Mqtt.Controllers;
 using service;
 using service.Abstractions;
 using service.Security;
@@ -95,7 +96,7 @@ public class Program
         
         
         
-
+        services.AddMqttControllers();
         services.AddControllers()
         .AddJsonOptions(options =>
         {
@@ -122,6 +123,7 @@ public class Program
         app.UseSwaggerUi();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseExceptionHandler();
         app.MapControllers();
         
         //app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().SetIsOriginAllowed(x => true));
@@ -131,7 +133,16 @@ public class Program
         // for development
         using (var scope = app.Services.CreateScope())
         {
-            //scope.ServiceProvider.GetRequiredService<ISeeder>().Seed().GetAwaiter().GetResult();
+            var mqtt = app.Services.GetRequiredService<IMqttClientService>();
+            var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+            var mqttSection = config.GetSection("MQTT");
+            mqtt.ConnectAsync(
+                        mqttSection.GetValue<string>("Host"), 
+                        mqttSection.GetValue<int>("Port"), 
+                        mqttSection.GetValue<string>("Username")
+                    ).GetAwaiter().GetResult();
+            
+            //app.Services.GetService()
         }
         
         app.Run();

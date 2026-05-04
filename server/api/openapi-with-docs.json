@@ -114,9 +114,9 @@
     "/api/auth/sse": {
       "get": {
         "tags": [
-          "Auth"
+          "Subscriber"
         ],
-        "operationId": "Auth_Connect",
+        "operationId": "Subscriber_Connect",
         "responses": {
           "200": {
             "description": ""
