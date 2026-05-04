@@ -1,33 +1,28 @@
-import { useState, type FormEvent } from 'react';
-import './auth.css';
-import '../../colors.css';
-import {main, signup, start} from "../pages.ts";
+import { type FormEvent } from 'react';
+import '../Auth.css';
+import '../../../colors.css';
+import {main, signup, start} from "../../pages.ts";
 import {useNavigate} from "react-router";
+import {useSignInPage} from "./useSignIn.ts";
 
 export default function SignInPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const {
+        setUsername,
+        setPassword,
+        username,
+        password,
+        error,
+        loading,
+        loginAsync
+    } = useSignInPage();
 
     const navigator = useNavigate();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        setError('');
-
-        if (!username.trim() || !password.trim()) {
-            setError('Please fill in both fields.');
-            return;
-        }
-
-        setLoading(true);
-        // Simulate async auth
-        await new Promise((r) => setTimeout(r, 900));
-        setLoading(false);
-
-        // Replace with real auth logic
-        navigator(main);
+        await loginAsync().then(r => {
+            if (r) navigator(main);
+        });
     };
 
     return (
