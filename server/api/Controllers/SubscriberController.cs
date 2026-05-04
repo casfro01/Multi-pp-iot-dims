@@ -7,7 +7,7 @@ using StateleSSE.AspNetCore;
 namespace api.Controllers;
 
 [ApiController]
-[Route("api/auth")]
+[Route("api/[controller]")]
 public class SubscriberController(ISseBackplane backplane) : ControllerBase
 {
     
