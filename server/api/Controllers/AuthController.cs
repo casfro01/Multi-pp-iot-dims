@@ -17,7 +17,7 @@ public class AuthController(IAuthService service, ITokenService tokenService, IS
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
-    public async Task<LoginResponse> Login([FromBody] LoginRequest request)
+    public async Task<LoginResponse> Login([FromBody]LoginRequest request)
     {
         var userInfo = service.Authenticate(request);
         var token = tokenService.CreateToken(userInfo);
@@ -27,7 +27,7 @@ public class AuthController(IAuthService service, ITokenService tokenService, IS
     [HttpPost]
     [Route("register")]
     [AllowAnonymous]
-    public async Task<RegisterResponse> Register([FromBody] RegisterRequest request)
+    public async Task<RegisterResponse> Register([FromBody]RegisterRequest request)
     {
         var userInfo = await service.Register(request);
         return new RegisterResponse(UserName: userInfo.UserName);
