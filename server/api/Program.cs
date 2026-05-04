@@ -12,6 +12,8 @@ using service;
 using service.Abstractions;
 using service.Security;
 using Sieve.Services;
+using StateleSSE.AspNetCore;
+using StateleSSE.AspNetCore.GroupRealtime;
 
 namespace api;
 public class Program
@@ -41,6 +43,12 @@ public class Program
         //services.AddScoped<ISeeder, SimpleSeeder>();
         services.AddProblemDetails();
         services.AddExceptionHandler<GlobalExceptionHandler>();
+        
+        // redis + backplane
+        //builder.Services.AddRedisSseBackplane(); // aktiver, når man er tættere på produktions dagen
+        builder.Services.AddInMemorySseBackplane();
+        builder.Services.AddGroupRealtime();
+        builder.Services.AddEfRealtime();
         
         services.AddDbContext<MyDbContext>((services, options) =>
         {
