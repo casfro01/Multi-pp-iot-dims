@@ -1,39 +1,29 @@
-import { useState, type FormEvent } from 'react';
-import './auth.css';
-import '../../colors.css';
+import { type FormEvent } from 'react';
+import '../Auth.css';
+import '../../../colors.css';
 import {useNavigate} from "react-router";
-import {main, signin, start} from "../pages.ts";
+import {main, signin, start} from "../../pages.ts";
+import {useCreateUser} from "./useSignUpPage.ts";
 
 
 export default function SignUpPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-    const [loading, setLoading] = useState(false);
     const navigator = useNavigate();
+    const {
+        username,
+        password,
+        error,
+        loading,
+        success,
+        setUsername,
+        setPassword,
+        createUser,
+    } = useCreateUser();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        setError('');
-        setSuccess('');
-
-        if (!username.trim()) {
-            setError('Please choose a username.');
-            return;
-        }
-        if (password.length < 6) {
-            setError('Password must be at least 6 characters.');
-            return;
-        }
-
-        setLoading(true);
-        // Simulate async register
-        await new Promise((r) => setTimeout(r, 900));
-        setLoading(false);
-
-        setSuccess('Account created! Redirecting…');
-        setTimeout(() => navigator(main), 1200);
+        await createUser().then(r => {
+            if (r) setTimeout(() => navigator(main), 600);
+        })
     };
 
     return (

@@ -2,7 +2,7 @@ import {createBrowserRouter, Outlet, RouterProvider} from "react-router";
 import LandingPage from "./pages/Frontpage/ChoosePage.tsx";
 import {Toaster} from "react-hot-toast";
 import SignInPage from "./pages/Frontpage/SignInPage.tsx";
-import SignUpPage from "./pages/Frontpage/SignUpPage.tsx";
+import SignUpPage from "./pages/Frontpage/SignUpPage/SignUpPage.tsx";
 
 function App() {
   return (

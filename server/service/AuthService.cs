@@ -1,4 +1,5 @@
-﻿using dataaccess;
+﻿using System.ComponentModel.DataAnnotations;
+using dataaccess;
 using dataaccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,8 @@ public class AuthService(MyDbContext ctx, IPasswordHasher<User> hasher) : IAuthS
 
     public async Task<AuthUserInfo> Register(RegisterRequest request)
     {
+        Validator.ValidateObject(request, new ValidationContext(request), true);
+        
         var user = await ctx.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName, CancellationToken.None);
         if (user != null)
             throw new Exception("User already exists.");

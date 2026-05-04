@@ -110,6 +110,19 @@
           }
         }
       }
+    },
+    "/api/auth/sse": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_Connect",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
@@ -127,7 +140,7 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "email": {
+          "userName": {
             "type": "string"
           },
           "password": {
@@ -148,16 +161,10 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "email": {
-            "type": "string"
-          },
           "userName": {
             "type": "string"
           },
           "password": {
-            "type": "string"
-          },
-          "name": {
             "type": "string"
           }
         }
@@ -170,9 +177,6 @@
             "type": "string"
           },
           "userName": {
-            "type": "string"
-          },
-          "role": {
             "type": "string"
           }
         }
