@@ -1,5 +1,6 @@
 
 using System.Text.Json.Serialization;
+using api.Controllers.MQTT;
 using dataaccess;
 using dataaccess.Entities;
 using DataAccess.Entities;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Mqtt.Controllers;
 using service;
 using service.Abstractions;
+using service.Models.Request;
 using service.Security;
 using Sieve.Services;
 using StateleSSE.AspNetCore;
@@ -38,6 +40,8 @@ public class Program
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, JwtService>();
         services.AddScoped<IPasswordHasher<User>, NSecArgon2IdPasswordHasher>();
+        
+        services.AddScoped<IPublisher<PairingRequest>, DeviceListener>();
         
         // seeder
         //services.AddScoped<ISeeder, BogusSeed>();

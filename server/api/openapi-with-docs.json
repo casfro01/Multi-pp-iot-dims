@@ -111,7 +111,7 @@
         }
       }
     },
-    "/api/auth/sse": {
+    "/api/Subscriber/sse": {
       "get": {
         "tags": [
           "Subscriber"
@@ -120,6 +120,36 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/api/Subscriber/SubscribeToDeviceConnection": {
+      "get": {
+        "tags": [
+          "Subscriber"
+        ],
+        "operationId": "Subscriber_SubscribeToDeviceConnection",
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }

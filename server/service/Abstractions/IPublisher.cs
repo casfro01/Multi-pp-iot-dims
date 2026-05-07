@@ -2,5 +2,7 @@
 
 public interface IPublisher<T>
 {
-    public void AddSubscriber(ISubscriber<T> subscriber);
+    public Task AddSubscriber(ISubscriber<string, string> subscriber);
+
+    public Task NotifySubscribers(T obj);
 }

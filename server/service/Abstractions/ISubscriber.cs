@@ -1,6 +1,7 @@
 ﻿namespace service.Abstractions;
 
-public interface ISubscriber<in T>
+public interface ISubscriber<T, K>
 {
-    public void Notify(T obj);
+    public T GetId();
+    public K GetPayload();
 }

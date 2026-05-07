@@ -2,13 +2,17 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using service.Abstractions;
+using service.Models.Request;
+using service.Models.Subscribers;
+using service.Util;
 using StateleSSE.AspNetCore;
 
 namespace api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SubscriberController(ISseBackplane backplane) : ControllerBase
+public class SubscriberController(ISseBackplane backplane, IPublisher<PairingRequest> publisher) : ControllerBase
 {
     
     
@@ -83,10 +87,17 @@ public class SubscriberController(ISseBackplane backplane) : ControllerBase
     }
 
 
+    /// <summary>
+    /// Opretter en lobby, som lytter til enheder som forbinder til den
+    /// </summary>
+    /// <param name="connectionId">Skaberens forbindelses id</param>
+    /// <returns>Lobbykoden, som skal bruges til at forbinde til lobbyen</returns>
     [HttpGet(nameof(SubscribeToDeviceConnection))]
     [Authorize]
-    public async Task SubscribeToDeviceConnection(string connectionId)
+    public async Task<string> SubscribeToDeviceConnection(string connectionId)
     {
-        throw new NotImplementedException("LLLLLLLLLLLll");
+        string code = LobbyCodeGenerator.GetANumberString();
+        await publisher.AddSubscriber(new DeviceSubscriber(connectionId, code));
+        return code;
     }
 }
