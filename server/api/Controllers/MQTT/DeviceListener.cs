@@ -1,5 +1,5 @@
 ﻿using Mqtt.Controllers;
-using Newtonsoft.Json;
+using System.Text.Json;
 using service.Abstractions;
 using service.Models.Request;
 using StateleSSE.AspNetCore;
@@ -31,6 +31,7 @@ public class DeviceListener(ISseBackplane backplane) : MqttController, IPublishe
     /// </summary>
     public async Task NotifySubscribers(PairingRequest obj)
     {
-        await backplane.Clients.SendToGroupAsync(GroupId + obj.Code, JsonConvert.SerializeObject(obj));
+        var jsonData = JsonSerializer.Serialize(obj);
+        await backplane.Clients.SendToGroupAsync(GroupId + obj.Code, jsonData);
     }
 }

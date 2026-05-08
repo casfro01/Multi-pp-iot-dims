@@ -3,6 +3,7 @@ import LandingPage from "./pages/Frontpage/ChoosePage.tsx";
 import {Toaster} from "react-hot-toast";
 import SignInPage from "./pages/Frontpage/SignInPage/SignInPage.tsx";
 import SignUpPage from "./pages/Frontpage/SignUpPage/SignUpPage.tsx";
+import DisplayFormattedDeviceConnection from "./pages/Frontpage/DisplayFormattedDeviceConnection.tsx";
 
 function App() {
   return (
@@ -21,11 +22,15 @@ function App() {
                           },
                           {
                               path: "/signin",
-                              element: <SignInPage></SignInPage>,
+                              element: <SignInPage/>,
                           },
                           {
                               path: "/signup",
-                              element: <SignUpPage></SignUpPage>
+                              element: <SignUpPage/>
+                          },
+                          {
+                              path: "/temp",
+                              element: <DisplayFormattedDeviceConnection/>
                           },
                       ],
                   },

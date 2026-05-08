@@ -1,4 +1,4 @@
-﻿import {AuthClient} from "./ServerAPI.ts"
+﻿import {AuthClient, SubscriberClient} from "./ServerAPI.ts"
 import {TOKEN_KEY, tokenStorage} from "./atoms/token.ts";
 
 
@@ -21,3 +21,4 @@ const customFetch = async (url: RequestInfo, init?: RequestInit) => {
 const baseUrl = undefined;
 
 export const authClient = new AuthClient(baseUrl, { fetch: customFetch });
+export const subClient = new SubscriberClient(baseUrl, { fetch: customFetch });
