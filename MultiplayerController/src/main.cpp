@@ -1,18 +1,21 @@
 #include <Arduino.h>
+#include "ButtonController.h"
 
-// put function declarations here:
-int myFunction(int, int);
+const int redPin = 14;
+const int yellowPin = 26;
+const int greenPin = 13;
+const int bluePin = 25;
+
+ButtonController obj(redPin, yellowPin, greenPin, bluePin);
 
 void setup() {
   // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+  Serial.println("Stareted");
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  obj.loop();
+  delay(10);
 }
