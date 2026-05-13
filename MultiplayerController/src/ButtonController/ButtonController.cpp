@@ -2,22 +2,16 @@
 #include <Arduino.h>
 #include "ButtonController.h"
 
-
-    //bool lastRedState = HIGH;
-    //bool lastYellowState = HIGH;
-    //bool lastGreenState = HIGH;
-    //bool lastBlueState = HIGH;
-
 ButtonController::ButtonController(int redPin, int yellowPin, int greenPin, int bluePin) {
     this->redPin = redPin;
     this->yellowPin = yellowPin;
     this->greenPin = greenPin;
     this->bluePin = bluePin;
 
-    pinMode(redPin, INPUT_PULLUP);
-    pinMode(yellowPin, INPUT_PULLUP);
-    pinMode(greenPin, INPUT_PULLUP);
-    pinMode(bluePin, INPUT_PULLUP); 
+    pinMode(redPin, INPUT);
+    pinMode(yellowPin, INPUT);
+    pinMode(greenPin, INPUT);
+    pinMode(bluePin, INPUT); 
 }
 
 
