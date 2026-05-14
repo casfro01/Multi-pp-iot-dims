@@ -44,8 +44,8 @@ Led led2(led2PinRed, led2PinGreen, led2PinBlue, led2RedChannel, led2GreenChannel
 Led led3(led3PinRed, led3PinGreen, led3PinBlue, led3RedChannel, led3GreenChannel, led3BlueChannel);
 Led led4(led4PinRed, led4PinGreen, led4PinBlue, led4RedChannel, led4GreenChannel, led4BlueChannel);
 Led leds[] = {
+  led2, // Jeg ved ikke helt hvorfor, men åbenbart skal led2 være først ift. train, da led2 lyser først i trainet, idk why, giver ikke mening.
   led1,
-  led2,
   led3,
   led4
 };
@@ -64,7 +64,7 @@ void setup() {
   Serial.println("Stareted");
 
  // ledController.startBlink(Color(255, 0, 0), 50, 500);
-  ledController.startTrain(Color(0, 255, 0), 100);
+  ledController.startTrain(Color(0, 255, 0), 250);
 }
 
 void loop() {
