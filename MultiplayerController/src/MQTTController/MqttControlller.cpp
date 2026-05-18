@@ -1,9 +1,20 @@
 #include "MqttController.h"
 #include <WiFi.h>
 #include "config.h"
-MqttController::MqttController() {
+
+
+MqttController::MqttController() : client(espClient) {
+}
+
+void MqttController::init() {
     connectToWiFi();
-    client = PubSubClient(espClient);
+    
+    client.setServer(MQTT_BROKER, MQTT_PORT);
+
+    client.setCallback([this](char* topic, uint8_t* payload, unsigned int length) {
+        this->onCommandReceived(topic, payload, length);
+    });
+
     connectToMQTT();
     subscribeToCommands();
 }
@@ -28,30 +39,57 @@ void MqttController::connectToWiFi() {
 void MqttController::onCommandReceived(char* topic, uint8_t* payload, unsigned int length) {
     Serial.print("Received command on topic: ");
     Serial.println(topic);
-    Serial.print("Payload: ");
-    for (unsigned int i = 0; i < length; ++i) {
-        Serial.write(payload[i]);
+    if (strcmp(topic, MQTT_COMMAND_ANIMATION) == 0) {
+        String message;
+        for (unsigned int i = 0; i < length; i++) {
+            message += (char)payload[i];
+        }
+        Serial.println(message);
+        lightAnimationCommandHandler(message.c_str());
+    } 
+    else {
+        Serial.println("Unknown command topic");
     }
-    Serial.println();
+}
+
+void MqttController::lightAnimationCommandHandler(const char* message) {
+    if (strcmp(message, "Blink") == 0) {
+        ledController->startBlink(Color(140, 245, 12), 12, 250);
+    }
+    else if (strcmp(message, "Train") == 0) {
+        ledController->startTrain(Color(0,255,0), 250);
+    }
+    else if (strcmp(message, "Pulse") == 0) {
+        ledController->startPulse(Color(255,0,0), 20);
+    }
+    else {
+        Serial.println("Unknown animation: " + String(message));
+    }
+}
+
+void MqttController::setLedController(LedController& controller) {
+    ledController = &controller;
+}
+void MqttController::setButtonController(ButtonController& controller) {
+    buttonController = &controller;
 }
 
 void MqttController::connectToMQTT() {
-    client.setServer(MQTT_BROKER, MQTT_PORT);
-    client.setCallback([this](char* topic, uint8_t* payload, unsigned int length) {
-        this->onCommandReceived(topic, payload, length);
-    });
     Serial.println("Connecting to MQTT...");
     Serial.println("============================");
-    if (client.connect(DEVICE_ID, MQTT_TOKEN, "")) {
-        Serial.println("Connected to MQTT broker!");
-    } else {
-        Serial.print("Failed to connect to MQTT broker, state: ");
-        Serial.println(client.state());
+    while (!client.connected()) {
+        if (client.connect(DEVICE_ID, MQTT_TOKEN, "")) {
+            Serial.println("MQTT connected");
+        } else {
+            Serial.print("failed state=");
+            Serial.println(client.state());
+            delay(2000);
+        }
     }
 }
 
 void MqttController::subscribeToCommands() {
-    client.subscribe(MQTT_COMMAND);
+    client.subscribe(MQTT_COMMAND_ANIMATION);
 }
 
 void MqttController::publishData(const char* topic, const char* payload) {

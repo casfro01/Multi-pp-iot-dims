@@ -4,6 +4,9 @@
 #include "../Models/ColorModel/Color.h"
 #include "../Models/LedModel/Led.h"
 
+LedController::LedController() {
+    // default constructor, should not use
+}
 
 // helper
 Color wheel(int position) {
@@ -79,7 +82,6 @@ void LedController::startBlink(Color color, int times, int speedMs) {
 
 void LedController::startTrain(Color color, int speedMs) {
     stopAnimation();
-
     currentAnimation = TRAIN;
 
     animationColor = color;
@@ -189,15 +191,16 @@ void LedController::loop() {
             if (now - lastStep >= animationDuration) {
                 lastStep = now;
 
+                if (trainIndex >= count) {
+                    stopAnimation();
+                    break;
+                }
+
                 clearAll();
 
                 leds[trainIndex].setColor(animationColor);
 
                 trainIndex++;
-
-                if (trainIndex >= count) {
-                    stopAnimation();
-                }
             }
             break;
         }

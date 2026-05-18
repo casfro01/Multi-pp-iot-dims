@@ -3,6 +3,10 @@
 #include "Led.h"
 #include "../ColorModel/Color.h"
 
+Led::Led() {
+    // Default constructor, should not be used
+}
+
 Led::Led(int redPin, int greenPin, int bluePin, int redChannel, int greenChannel, int blueChannel) {
     this->redPin = redPin;
     this->greenPin = greenPin;

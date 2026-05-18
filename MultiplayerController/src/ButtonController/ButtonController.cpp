@@ -2,6 +2,10 @@
 #include <Arduino.h>
 #include "ButtonController.h"
 
+ButtonController::ButtonController() {
+    // default constructor, should not use
+}
+
 ButtonController::ButtonController(int redPin, int yellowPin, int greenPin, int bluePin) {
     this->redPin = redPin;
     this->yellowPin = yellowPin;

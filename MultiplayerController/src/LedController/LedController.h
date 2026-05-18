@@ -50,6 +50,7 @@ class LedController {
         void clearAll();
     
     public:
+        LedController(); // default -> should not use!
         LedController(Led* leds, int count);
         //void addLed(Led led);
         void setColor(int index, Color color);
