@@ -1,12 +1,14 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-
-namespace DataAccess.Entities;
+﻿namespace DataAccess.Entities;
 
 public partial class Answer
 {
-    public string AnswerText { get; set; } = null!;
+    public int Id { get; set; }
 
-    public bool IsCorrect { get; set; } = false;
+    public bool Correct { get; set; }
+
+    public string? Content { get; set; }
+
+    public int QuestionId { get; set; }
+
+    public virtual Question Question { get; set; } = null!;
 }

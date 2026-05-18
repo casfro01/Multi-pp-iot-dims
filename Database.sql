@@ -6,3 +6,37 @@ CREATE TABLE quiz.user(
     UserName TEXT NOT NULL,
     PasswordHash TEXT NOT NULL
 );
+
+create table quiz.quiz
+(
+    id   integer not null
+        generated always as identity
+        constraint quiz_pk
+            primary key,
+    name text
+);
+
+create table quiz.questions
+(
+    id      integer not null
+        generated always as identity
+        constraint questions_pk
+            primary key,
+    quiz_id integer not null
+        constraint questions_questions_id_fk
+            references quiz.quiz(id) ON DELETE CASCADE,
+    content text
+);
+
+create table quiz.answers
+(
+    id          integer not null
+        generated always as identity
+        constraint answers_pk
+            primary key,
+    correct     boolean not null,
+    content     text,
+    question_id integer not null
+        constraint answers_answers_id_fk
+            references quiz.questions(id) ON DELETE CASCADE
+);

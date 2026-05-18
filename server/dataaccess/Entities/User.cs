@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace dataaccess.Entities;
+namespace DataAccess.Entities;
 
 public partial class User
 {

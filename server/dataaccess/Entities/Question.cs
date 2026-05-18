@@ -1,12 +1,14 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-
-namespace DataAccess.Entities;
+﻿namespace DataAccess.Entities;
 
 public partial class Question
 {
-    public string QuestionText { get; set; } = null!;
+    public int Id { get; set; }
 
-    public List<Answer> Answers { get; set; } = null!;
+    public int QuizId { get; set; }
+
+    public string? Content { get; set; }
+
+    public virtual ICollection<Answer> Answers { get; set; } = new List<Answer>();
+
+    public virtual Quiz Quiz { get; set; } = null!;
 }
