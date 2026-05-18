@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using dataaccess;
-using dataaccess.Entities;
+using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using service.Abstractions;
