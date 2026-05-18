@@ -2,7 +2,6 @@
 using System.Text.Json.Serialization;
 using api.Controllers.MQTT;
 using dataaccess;
-using dataaccess.Entities;
 using DataAccess.Entities;
 using DefaultNamespace;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -39,6 +38,7 @@ public class Program
         services.AddScoped<ISieveProcessor, SieveProcessor>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, JwtService>();
+        services.AddScoped<IQuizService, QuizService>(); 
         services.AddScoped<IPasswordHasher<User>, NSecArgon2IdPasswordHasher>();
         
         services.AddScoped<IPublisher<PairingRequest>, DeviceListener>();

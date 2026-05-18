@@ -111,6 +111,29 @@
         }
       }
     },
+    "/api/Quiz/GetQuizzes": {
+      "get": {
+        "tags": [
+          "Quiz"
+        ],
+        "operationId": "Quiz_GetQuizzes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BaseQuizResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Subscriber/sse": {
       "get": {
         "tags": [
@@ -208,6 +231,23 @@
           },
           "userName": {
             "type": "string"
+          }
+        }
+      },
+      "BaseQuizResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
           }
         }
       }
