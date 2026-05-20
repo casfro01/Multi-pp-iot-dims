@@ -5,6 +5,7 @@
 #include "../LedController/LedController.h"
 #include "../Models/LedModel/Led.h"
 #include "../MQTTController/MqttController.h"
+#include "../LcdController/LcdController.h"
 
 class Manager {
     private:
@@ -59,6 +60,7 @@ class Manager {
         LedController ledController;
         MqttController mqttController;
         ButtonController buttonController;
+        LcdController lcdController;
     
     public:
         Manager();

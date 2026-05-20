@@ -28,21 +28,127 @@ void ButtonController::loop() {
     // Red button
     if (redState == LOW && lastRedState == HIGH) {
         Serial.println("Red button pressed");
+        if (typeCode == true){
+            codeSequence[codeIndex] = 1;
+            codeIndex++;
+            if (codeIndex == 12){
+                if (callbackConnect) {
+                    callbackConnect(codeSequence, 12);
+                }
+                // todo: remove when done testing
+                Serial.println("Code entered: ");
+                for (int i = 0; i < 12; i++){
+                    Serial.print(codeSequence[i]);
+                    Serial.print(" ");
+                }
+                Serial.println();
+                // end remove
+                codeIndex = 0;
+                typeCode = false;
+            }
+        }
+        else if (callbackRed) {
+            callbackRed();
+        }
     }
 
     // Yellow button
     if (yellowState == LOW && lastYellowState == HIGH) {
         Serial.println("Yellow button pressed");
+        if (typeCode == true){
+            codeSequence[codeIndex] = 3;
+            codeIndex++;
+            if (codeIndex == 12){
+                if (callbackConnect) {
+                    callbackConnect(codeSequence, 12);
+                }
+                // todo: remove when done testing
+                Serial.println("Code entered: ");
+                for (int i = 0; i < 12; i++){
+                    Serial.print(codeSequence[i]);
+                    Serial.print(" ");
+                }
+                Serial.println();
+                // end remove
+                codeIndex = 0;
+                typeCode = false;
+            }
+        }
+        else if (callbackYellow) {
+            callbackYellow();
+        }
     }
 
     // Green button
     if (greenState == LOW && lastGreenState == HIGH) {
         Serial.println("Green button pressed");
+        if (typeCode == true){
+            codeSequence[codeIndex] = 4;
+            codeIndex++;
+            if (codeIndex == 12){
+                if (callbackConnect) {
+                    callbackConnect(codeSequence, 12);
+                }
+                // todo: remove when done testing
+                Serial.println("Code entered: ");
+                for (int i = 0; i < 12; i++){
+                    Serial.print(codeSequence[i]);
+                    Serial.print(" ");
+                }
+                Serial.println();
+                // end remove
+                codeIndex = 0;
+                typeCode = false;
+            }
+        }
+        else if (callbackGreen) {
+            callbackGreen();
+        }
     }
 
     // Blue button
     if (blueState == LOW && lastBlueState == HIGH) {
         Serial.println("Blue button pressed");
+        if (typeCode == true){
+            codeSequence[codeIndex] = 2;
+            codeIndex++;
+            if (codeIndex == 12){
+                if (callbackConnect) {
+                    callbackConnect(codeSequence, 12);
+                }
+                // todo: remove when done testing
+                Serial.println("Code entered: ");
+                for (int i = 0; i < 12; i++){
+                    Serial.print(codeSequence[i]);
+                    Serial.print(" ");
+                }
+                Serial.println();
+                // end remove
+                codeIndex = 0;
+                typeCode = false;
+            }
+        }
+        else if (callbackBlue) {
+            callbackBlue();
+        }
+    }
+
+    if (blueState == HIGH && lastBlueState == HIGH && redState == HIGH && lastRedState == HIGH){
+        if (typeCode == false && lastTimeTaken == 0){
+            Serial.println("Type code button pressed");
+            lastTimeTaken = millis();
+        }
+        else if (typeCode == false && lastTimeTaken + 5000 < millis()){
+            Serial.println("Start typeing code");
+            typeCode = true;
+            if (whileTypingCode) {
+                whileTypingCode();
+            }
+        }
+
+    }
+    else if (lastTimeTaken != 0){
+        lastTimeTaken = 0;
     }
 
     // Save previous states
@@ -50,4 +156,28 @@ void ButtonController::loop() {
     lastYellowState = yellowState;
     lastGreenState = greenState;
     lastBlueState = blueState;
+}
+
+void ButtonController::setCallbackGreen(std::function<void()> callback) {
+    callbackGreen = callback;
+}
+
+void ButtonController::setCallbackRed(std::function<void()> callback) {
+    callbackRed = callback;
+}
+
+void ButtonController::setCallbackYellow(std::function<void()> callback) {
+    callbackYellow = callback;
+}
+
+void ButtonController::setCallbackBlue(std::function<void()> callback) {
+    callbackBlue = callback;
+}
+
+void ButtonController::setCallbackConnect(std::function<void(int*, int)> callback) {
+    callbackConnect = callback;
+}
+
+void ButtonController::setWhileTypingCode(std::function<void()> callback) {
+    whileTypingCode = callback;
 }

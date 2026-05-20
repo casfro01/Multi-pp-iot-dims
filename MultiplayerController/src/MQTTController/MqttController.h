@@ -7,6 +7,8 @@
 
 class MqttController {
     private:
+        char* display_name;
+
         WiFiClient espClient;
         PubSubClient client;
         LedController* ledController;
@@ -20,7 +22,7 @@ class MqttController {
     public:
         MqttController();
         void init(); // connects to WiFi, MQTT, and subscribes to commands in the constructor
-        void publishData(const char* topic, const char* payload);
+        void publishData(const char* path, const char* payload);
         void loop();
 
         void setLedController(LedController& controller);
