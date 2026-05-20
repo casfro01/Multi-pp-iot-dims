@@ -83,25 +83,27 @@ void MqttController::setButtonController(ButtonController& controller) {
     // ButtonController expects plain function pointers. Use static wrappers.
     buttonController->setCallbackGreen([this]() {
         Serial.println("Green button callback triggered");
-        this->publishData(MQTT_TOPIC, "{\"Button\":\"Green\"}");
+        this->publishButtonData("Green");
     });
     buttonController->setCallbackRed([this]() {
         Serial.println("Red button callback triggered");
-        this->publishData(MQTT_TOPIC, "{\"Button\":\"Red\"}");
+        this->publishButtonData("Red");
     });
     buttonController->setCallbackYellow([this]() {
         Serial.println("Yellow button callback triggered");
-        this->publishData(MQTT_TOPIC, "{\"Button\":\"Yellow\"}");
+        this->publishButtonData("Yellow");
     });
     buttonController->setCallbackBlue([this]() {
         Serial.println("Blue button callback triggered");
-        this->publishData(MQTT_TOPIC, "{\"Button\":\"Blue\"}");
+        this->publishButtonData("Blue");
     });
     buttonController->setCallbackConnect([this](int* codeSequence, int length) {
+        this->codeSequence = codeSequence;
+        this->codeLength = length;
         String message = "{\"ConnectCode\":\"";
         Serial.println("Connect callback triggered with code sequence:");
         for (int i = 0; i < length; i++) {
-            message += String(codeSequence[i]) + " ";
+            message += String(codeSequence[i]) + "";
         }
         message += "\"}";
         Serial.println(message);
@@ -111,6 +113,15 @@ void MqttController::setButtonController(ButtonController& controller) {
     buttonController->setWhileTypingCode([this]() {
         ledController->startBlink(Color(255, 255, 0), 1200, 100); // Blink yellow while typing code
     });
+}
+
+void MqttController::publishButtonData(char* buttonColor) {
+    String codemes = "";
+    for (int i = 0; i < this->codeLength; i++) {
+        codemes += String(this->codeSequence[i]) + "";
+    }
+    String message = "{\"Button\":\"" + String(buttonColor) + "\"," + "ConnectCode\":\"" + String(this->codeSequence[0]) + "\"}";
+    publishData(MQTT_TOPIC, message.c_str());
 }
 
 void MqttController::connectToMQTT() {

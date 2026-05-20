@@ -13,11 +13,15 @@ class MqttController {
         PubSubClient client;
         LedController* ledController;
         ButtonController* buttonController;
+        int* codeSequence = nullptr;
+        int codeLength = 0;
         void connectToWiFi();
         void connectToMQTT();
         void subscribeToCommands();
         void onCommandReceived(char* topic, uint8_t* payload, unsigned int length);
         void lightAnimationCommandHandler(const char* message);
+
+        void publishButtonData(char* buttonColor);
     
     public:
         MqttController();
