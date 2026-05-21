@@ -111,6 +111,38 @@
         }
       }
     },
+    "/api/auth/SetDisplayName": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_SetDisplayName",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetDisplayNameRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Quiz/GetQuizzes": {
       "get": {
         "tags": [
@@ -153,6 +185,36 @@
           "Subscriber"
         ],
         "operationId": "Subscriber_SubscribeToDeviceConnection",
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Subscriber/SubscribeToDeviceLink": {
+      "get": {
+        "tags": [
+          "Subscriber"
+        ],
+        "operationId": "Subscriber_SubscribeToDeviceLink",
         "parameters": [
           {
             "name": "connectionId",
@@ -230,6 +292,24 @@
             "type": "string"
           },
           "userName": {
+            "type": "string"
+          }
+        }
+      },
+      "SetDisplayNameRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "deviceId": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "displayName": {
             "type": "string"
           }
         }

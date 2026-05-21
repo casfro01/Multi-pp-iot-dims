@@ -47,9 +47,9 @@ create table quiz.user_device_link
         generated always as identity
         constraint user_device_link_pk
             primary key,
-    user_id     text
+    user_id     text NOT NULL
                 constraint user_id_fk
                 references quiz.user(id) ON DELETE CASCADE,
-    device_id     text UNIQUE,
-    display_name text
+    device_id     text NOT NULL UNIQUE,
+    display_name text NOT NULL
 );

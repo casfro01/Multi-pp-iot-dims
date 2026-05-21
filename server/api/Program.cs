@@ -42,6 +42,9 @@ public class Program
         services.AddScoped<IPasswordHasher<User>, NSecArgon2IdPasswordHasher>();
         
         services.AddScoped<IPublisher<PairingRequest>, DeviceListener>();
+        services.AddScoped<IPublisher<ButtonPressRequest>, ButtonPressListener>();
+
+        services.AddScoped<DeviceCommandSender>();
         
         // seeder
         //services.AddScoped<ISeeder, BogusSeed>();

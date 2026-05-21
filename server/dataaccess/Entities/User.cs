@@ -13,4 +13,6 @@ public partial class User
 
     [JsonIgnore]
     public string PasswordHash { get; set; } = null!;
+    
+    public virtual ICollection<UserDeviceLink> UserDeviceLinks { get; set; } = new List<UserDeviceLink>();
 }

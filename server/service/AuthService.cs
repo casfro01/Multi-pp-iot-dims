@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using api.Controllers;
 using dataaccess;
 using DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -50,5 +51,30 @@ public class AuthService(MyDbContext ctx, IPasswordHasher<User> hasher) : IAuthS
     {
         var user = await ctx.Users.FirstOrDefaultAsync(u => u.Id == id, CancellationToken.None);
         return user == null ? throw new Exception("User does not exist.") : new AuthUserInfo(user.Id, user.UserName);
+    }
+
+    public async Task<string> SetDisplayName(SetDisplayNameRequest request)
+    {
+        var user = await ctx.Users.FirstOrDefaultAsync(u => u.Id.Equals(request.UserId));
+        if (user == null) throw new ValidationException("What user??");
+        var udl = await ctx.UserDeviceLinks.FirstOrDefaultAsync(d => d.DeviceId.Equals(user.Id));
+        if (udl != null) {
+            udl.User = user;
+            udl.UserId = user.Id;
+            udl.DisplayName = request.DisplayName;
+        }
+        else {
+            udl = new UserDeviceLink()
+            {
+                DeviceId = request.DeviceId,
+                DisplayName = request.DisplayName,
+                User = user,
+                UserId = user.Id
+            };
+            ctx.UserDeviceLinks.Add(udl);
+        }
+        
+        await ctx.SaveChangesAsync();
+        return request.DisplayName;
     }
 }

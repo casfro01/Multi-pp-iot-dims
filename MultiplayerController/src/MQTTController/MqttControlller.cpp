@@ -61,9 +61,18 @@ void MqttController::onCommandReceived(char* topic, uint8_t* payload, unsigned i
 }
 
 void MqttController::lightAnimationCommandHandler(const char* message) {
-    if (strcmp(message, "Blink") == 0) {
-        ledController->startBlink(Color(140, 245, 12), 12, 250);
+    if (strcmp(message, "GreenBlink") == 0) {
+        ledController->startBlink(Color(0, 255, 0), 12, 250);
     }
+    else if (strcmp(message, "RedBlink") == 0) {
+        ledController->startBlink(Color(255, 0, 0), 12, 250);
+    }
+    else if (strcmp(message, "BlueBlink") == 0) {
+        ledController->startBlink(Color(0, 0, 255), 12, 250);
+    }
+    else if (strcmp(message, "YellowBlink") == 0) {
+        ledController->startBlink(Color(255, 255, 0), 12, 250);
+    }   
     else if (strcmp(message, "Train") == 0) {
         ledController->startTrain(Color(0,255,0), 250);
     }

@@ -1,35 +1,7 @@
 import "./LinkDevice.css"
 import {ANSWER_COLORS, ANSWER_SHAPES} from '../../answerStyles.ts'
-import {useEffect, useRef, useState} from "react";
-import {useNavigate} from "react-router";
-
-// ── Types ────────────────────────────────────────────────────────────────────
-type Step = 'name' | 'code' | 'success'
-
-interface LinkDeviceState {
-    step: Step
-    displayName: string
-    code: string | null
-    loading: boolean
-    error: string | null
-}
-
-async function requestLinkCode(displayName: string): Promise<string> {
-    // TODO: replace with actual fetch
-
-    // ── Simulated response ──
-    await new Promise(r => setTimeout(r, 1200))
-    const digits = [1, 2, 3, 4]
-    return Array.from({ length: 12 }, () => digits[Math.floor(Math.random() * 4)]).join('')
-}
-
-async function pollLinkStatus(code: string): Promise<{ status: 'pending' | 'confirmed' }> {
-    // TODO: replace with actual fetch / SSE / websocket
-
-    // ── Simulated: confirm after ~8 s ──
-    void code
-    return { status: 'pending' }
-}
+import {useState} from "react";
+import {useLinkDevicePage} from "./useLinkDevice.ts";
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -191,88 +163,12 @@ function SuccessStep({ displayName }: SuccessStepProps) {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
-export default function LinkDevicePage() {
-    const [state, setState] = useState<LinkDeviceState>({
-        step: 'name',
-        displayName: '',
-        code: null,
-        loading: false,
-        error: null,
-    });
-
-    const navigator = useNavigate();
-
-    const onSuccess = (name: string) => {
-        // TODO : do someting
-        console.log(name);
-    };
-
-    const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-    // ── Start polling once we have a code ──
-    useEffect(() => {
-        if (state.step !== 'code' || !state.code) return
-
-        const code = state.code
-
-        pollRef.current = setInterval(async () => {
-            try {
-                const { status } = await pollLinkStatus(code)
-                if (status === 'confirmed') {
-                    clearInterval(pollRef.current!)
-                    setState(s => ({ ...s, step: 'success' }))
-                }
-            } catch {
-                // silent — keep polling
-            }
-        }, 3000)
-
-        return () => {
-            if (pollRef.current) clearInterval(pollRef.current)
-        }
-    }, [state.step, state.code])
-
-    // ── Redirect after success ──
-    useEffect(() => {
-        if (state.step !== 'success') return
-
-        const timer = setTimeout(() => {
-            if (onSuccess) {
-                onSuccess(state.displayName)
-            } else {
-                navigator("/main");
-            }
-        }, 2500)
-
-        return () => clearTimeout(timer)
-    }, [state.step, state.displayName, onSuccess, navigator])
-
-    // ── Handlers ──
-
-    const handleNameSubmit = async (displayName: string) => {
-        setState(s => ({ ...s, loading: true, error: null }))
-        try {
-            const code = await requestLinkCode(displayName)
-            setState(s => ({
-                ...s,
-                step: 'code',
-                displayName,
-                code,
-                loading: false,
-            }))
-        } catch (err) {
-            setState(s => ({
-                ...s,
-                loading: false,
-                error: err instanceof Error ? err.message : 'Something went wrong. Please try again.',
-            }))
-        }
-    }
-
-    const handleBack = () => {
-        if (pollRef.current) clearInterval(pollRef.current)
-        setState({ step: 'name', displayName: '', code: null, loading: false, error: null })
-    }
+export default function LinkDevice() {
+    const {
+        state,
+        handleNameSubmit,
+        handleBack
+    } = useLinkDevicePage();
 
     // ── Render ──
 
