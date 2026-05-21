@@ -18,6 +18,8 @@ public partial class MyDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserDeviceLink> UserDeviceLinks { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Answer>(entity =>
@@ -76,6 +78,27 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.PasswordHash).HasColumnName("passwordhash");
             entity.Property(e => e.UserName).HasColumnName("username");
+        });
+
+        modelBuilder.Entity<UserDeviceLink>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("user_device_link_pk");
+
+            entity.ToTable("user_device_link", "quiz");
+
+            entity.HasIndex(e => e.DeviceId, "user_device_link_device_id_key").IsUnique();
+
+            entity.Property(e => e.Id)
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("id");
+            entity.Property(e => e.DeviceId).HasColumnName("device_id");
+            entity.Property(e => e.DisplayName).HasColumnName("display_name");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserDeviceLinks)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("user_id_fk");
         });
 
         OnModelCreatingPartial(modelBuilder);

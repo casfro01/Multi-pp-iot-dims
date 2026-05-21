@@ -40,3 +40,16 @@ create table quiz.answers
         constraint answers_answers_id_fk
             references quiz.questions(id) ON DELETE CASCADE
 );
+
+create table quiz.user_device_link
+(
+    id          integer not null
+        generated always as identity
+        constraint user_device_link_pk
+            primary key,
+    user_id     text
+                constraint user_id_fk
+                references quiz.user(id) ON DELETE CASCADE,
+    device_id     text UNIQUE,
+    display_name text
+);
