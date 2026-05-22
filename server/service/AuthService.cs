@@ -57,7 +57,7 @@ public class AuthService(MyDbContext ctx, IPasswordHasher<User> hasher) : IAuthS
     {
         var user = await ctx.Users.FirstOrDefaultAsync(u => u.Id.Equals(request.UserId));
         if (user == null) throw new ValidationException("What user??");
-        var udl = await ctx.UserDeviceLinks.FirstOrDefaultAsync(d => d.DeviceId.Equals(user.Id));
+        var udl = await ctx.UserDeviceLinks.FirstOrDefaultAsync(d => d.DeviceId.Equals(request.DeviceId));
         if (udl != null) {
             udl.User = user;
             udl.UserId = user.Id;

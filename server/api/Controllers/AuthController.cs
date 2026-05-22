@@ -54,12 +54,9 @@ public class AuthController(IAuthService service, ITokenService tokenService) : 
     public async Task<string> SetDisplayName([FromBody] SetDisplayNameRequest request)
     {
         var requestUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (requestUserId != null)
-        {
-            request.UserId = requestUserId;
-            return "None";
-        }
-
+        if (requestUserId == null) return "None";
+        
+        request.UserId = requestUserId;
         string displayName = await service.SetDisplayName(request);
         return displayName;
     }

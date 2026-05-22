@@ -208,36 +208,6 @@
           }
         }
       }
-    },
-    "/api/Subscriber/SubscribeToDeviceLink": {
-      "get": {
-        "tags": [
-          "Subscriber"
-        ],
-        "operationId": "Subscriber_SubscribeToDeviceLink",
-        "parameters": [
-          {
-            "name": "connectionId",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {

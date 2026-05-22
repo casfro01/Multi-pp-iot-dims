@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {StateleSSEClient} from "../../../core/SseClientSecure.ts";
 import {authClient, subClient} from "../../../core/api-clients.ts";
 import {useAtom} from "jotai";
@@ -28,14 +28,16 @@ export const useLinkDevicePage = () => {
         loading: false,
         error: null,
     });
+    const stateRef = useRef(state)
     const navigator = useNavigate();
+    // for some reason the code doesnt update in the state, so we have to inject it
     const onSuccess = async (payload: PairingPayload) => {
         setState(s => ({...s, loading: true, error: null}));
         try{
             await authClient.setDisplayName({
                 displayName: state.displayName,
                 deviceId: payload.DeviceId,
-                code: state.code ? state.code : undefined,
+                code: stateRef.current.code ? stateRef.current.code : undefined,
                 userId: "shababs"
             })
         }
@@ -68,28 +70,25 @@ export const useLinkDevicePage = () => {
         client?.disconnect();
     }
     useEffect(() => {
+        stateRef.current = state
         if (state.displayName === '' || state.code || state.step != 'code') return;
         const sseClient = new StateleSSEClient('/api/Subscriber/sse', 'connected', token)
         setClient(sseClient);
-        const unsubscribe = sseClient.listen<PairingPayload | string>(
+        sseClient.listen<PairingPayload | string>(
             async (connectionId) => {
                 const code = await subClient.subscribeToDeviceConnection(connectionId)
-                setState(s => ({ ...s, code: 'success' }))
-                console.log(code);
+                console.log(code)
+                setState(s => ({ ...s, code: code, step: 'code' }))
                 return { group: 'deviceJoin' + code, data: null };
             },
             (raw) => {
-                const payload = mapToPairingPayload(raw);
+                const payload: PairingPayload = typeof raw === 'string' ? mapToPairingPayload(JSON.parse(raw)) : raw
                 if (payload){
                     setState(s => ({ ...s, step: 'success' }))
+                    onSuccess(payload);
                 }
-                onSuccess(payload);
             },
-        )
-        return () => {
-            unsubscribe();
-            sseClient.disconnect();
-        }
+        );
     }, [state]);
 
     return {
