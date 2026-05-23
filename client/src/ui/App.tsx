@@ -6,6 +6,8 @@ import SignUpPage from "./pages/Frontpage/SignUpPage/SignUpPage.tsx";
 import DisplayFormattedDeviceConnection from "./pages/Frontpage/DisplayFormattedDeviceConnection.tsx";
 import CategoryPage from "./pages/CategoryPage/CategoryPage.tsx";
 import LobbyPage from "./pages/LobbyPage/LobbyPage.tsx";
+import LinkDevice from "./pages/LinkDevicePage/LinkDevice.tsx";
+import MainPage from "./pages/MainPage/MainPage.tsx";
 
 function App() {
   return (
@@ -29,6 +31,14 @@ function App() {
                           {
                               path: "/signup",
                               element: <SignUpPage/>
+                          },
+                          {
+                              path: "/linkdevice",
+                              element: <LinkDevice/>
+                          },
+                          {
+                              path: "/main",
+                              element: <MainPage/>
                           },
                           {
                               path: "/temp",

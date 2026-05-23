@@ -1,5 +1,6 @@
 ﻿using System.Runtime.ExceptionServices;
 using System.Text.Json;
+using api.Controllers.MQTT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using service.Abstractions;
@@ -12,7 +13,7 @@ namespace api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SubscriberController(ISseBackplane backplane, IPublisher<PairingRequest> publisher) : ControllerBase
+public class SubscriberController(ISseBackplane backplane, IPublisher<PairingRequest> publisher, IPublisher<ButtonPressRequest> buttonPublisher) : ControllerBase
 {
     
     

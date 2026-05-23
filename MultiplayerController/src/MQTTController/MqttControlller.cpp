@@ -2,7 +2,6 @@
 #include <WiFi.h>
 #include "config.h"
 
-
 MqttController::MqttController() : client(espClient) {
 }
 
@@ -39,7 +38,7 @@ void MqttController::connectToWiFi() {
 void MqttController::onCommandReceived(char* topic, uint8_t* payload, unsigned int length) {
     Serial.print("Received command on topic: ");
     Serial.println(topic);
-    if (strcmp(topic, MQTT_COMMAND_ANIMATION) == 0) {
+    if (strcmp(topic, MQTT_COMMAND_ANIMATION.c_str()) == 0) {
         String message;
         for (unsigned int i = 0; i < length; i++) {
             message += (char)payload[i];
@@ -47,15 +46,33 @@ void MqttController::onCommandReceived(char* topic, uint8_t* payload, unsigned i
         Serial.println(message);
         lightAnimationCommandHandler(message.c_str());
     } 
+    else if (strcmp(topic, MQTT_COMMAND_SET_NAME.c_str()) == 0) {
+        String message;
+        for (unsigned int i = 0; i < length; i++) {
+            message += (char)payload[i];
+        }
+        this->display_name = strdup(message.c_str()); // Store the new display name (ensure to free old name if necessary)
+        // indsæt opdatering at LCD
+        Serial.println(message);
+    }
     else {
         Serial.println("Unknown command topic");
     }
 }
 
 void MqttController::lightAnimationCommandHandler(const char* message) {
-    if (strcmp(message, "Blink") == 0) {
-        ledController->startBlink(Color(140, 245, 12), 12, 250);
+    if (strcmp(message, "GreenBlink") == 0) {
+        ledController->startBlink(Color(0, 255, 0), 12, 250);
     }
+    else if (strcmp(message, "RedBlink") == 0) {
+        ledController->startBlink(Color(255, 0, 0), 12, 250);
+    }
+    else if (strcmp(message, "BlueBlink") == 0) {
+        ledController->startBlink(Color(0, 0, 255), 12, 250);
+    }
+    else if (strcmp(message, "YellowBlink") == 0) {
+        ledController->startBlink(Color(255, 255, 0), 12, 250);
+    }   
     else if (strcmp(message, "Train") == 0) {
         ledController->startTrain(Color(0,255,0), 250);
     }
@@ -72,6 +89,53 @@ void MqttController::setLedController(LedController& controller) {
 }
 void MqttController::setButtonController(ButtonController& controller) {
     buttonController = &controller;
+    // ButtonController expects plain function pointers. Use static wrappers.
+    buttonController->setCallbackGreen([this]() {
+        Serial.println("Green button callback triggered");
+        this->publishButtonData(String("Green").c_str());
+    });
+    buttonController->setCallbackRed([this]() {
+        Serial.println("Red button callback triggered");
+        this->publishButtonData(String("Red").c_str());
+    });
+    buttonController->setCallbackYellow([this]() {
+        Serial.println("Yellow button callback triggered");
+        this->publishButtonData(String("Yellow").c_str());
+    });
+    buttonController->setCallbackBlue([this]() {
+        Serial.println("Blue button callback triggered");
+        this->publishButtonData(String("Blue").c_str());
+    });
+    buttonController->setCallbackConnect([this](int* codeSequence, int length) {
+        this->codeSequence = codeSequence;
+        this->codeLength = length;
+        String message = "{\"Code\":\"";
+        Serial.println("Connect callback triggered with code sequence:");
+        for (int i = 0; i < length; i++) {
+            message += String(codeSequence[i]) + "";
+        }
+        message += "\", \"DisplayName\":\"" + String(this->display_name) + "\"";
+        message += ", \"DeviceID\":\"" + String(DEVICE_ID) + "\"}";
+        Serial.println(message);
+        publishData(MQTT_CONNECT_TOPIC.c_str(), message.c_str());
+        ledController->startBlink(Color(0, 255, 255), 1, 150); // Blink cyan on successful code entry
+    });
+    buttonController->setWhileTypingCode([this]() {
+        ledController->startRainbowBlink(100);
+    });
+}
+
+void MqttController::publishButtonData(const char* buttonColor) {
+    if (codeSequence == nullptr || codeLength == 0) {
+        Serial.println("Nowhere to send data, pointless to send at nothing.");
+        return;
+    }
+    String codemes = "";
+    for (int i = 0; i < this->codeLength; i++) {
+        codemes += String(this->codeSequence[i]) + "";
+    }
+    String message = "{\"Button\":\"" + String(buttonColor) + "\",\"ConnectCode\":\"" + codemes + "\"}";
+    publishData(MQTT_TOPIC.c_str(), message.c_str());
 }
 
 void MqttController::connectToMQTT() {
@@ -89,11 +153,14 @@ void MqttController::connectToMQTT() {
 }
 
 void MqttController::subscribeToCommands() {
-    client.subscribe(MQTT_COMMAND_ANIMATION);
+    client.subscribe(MQTT_COMMAND_ANIMATION.c_str());
+    client.subscribe(MQTT_COMMAND_SET_NAME.c_str());
 }
 
-void MqttController::publishData(const char* topic, const char* payload) {
-    if (client.publish(topic, payload)) {
+void MqttController::publishData(const char* path, const char* payload) {
+    Serial.println(String(MQTT_TOPIC));
+    Serial.println(String(MQTT_CONNECT_TOPIC));
+    if (client.publish(path, payload)) {
         Serial.println("Data published successfully!");
     } else {
         Serial.println("Failed to publish data.");

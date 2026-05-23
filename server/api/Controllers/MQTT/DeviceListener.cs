@@ -9,9 +9,12 @@ namespace api.Controllers.MQTT;
 public class DeviceListener(ISseBackplane backplane) : MqttController, IPublisher<PairingRequest>
 {
     private const string GroupId = "deviceJoin"; // ved ikke om denne er nødvendig siden vi bare bruger lobbykoden til at adskille grupperne
+    //[Deprecated]
     private const string MqttRoute = "my/topic";
 
-    [MqttRoute(MqttRoute)]
+    private const string ConnectTopic = "controller/+/connectcode";
+
+    [MqttRoute(ConnectTopic)]
     public async Task CollectDeviceConnection(PairingRequest pairing)
     {
         await NotifySubscribers(pairing);

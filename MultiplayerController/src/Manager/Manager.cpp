@@ -22,7 +22,8 @@ Manager::Manager() :
                 // channels
                 9, 10, 11),
             ledController(nullptr, 4),
-            buttonController(39, 34, 36, 35)
+            buttonController(39, 34, 36, 35),
+            lcdController()
 {
     leds[0] = led2;
     leds[1] = led1;
@@ -38,6 +39,7 @@ void Manager::begin() {
     mqttController.setButtonController(buttonController);
     mqttController.init();
     ledController.startBlink(Color(255, 255, 0), 10, 100);
+    lcdController.lcdInit();
 }
 
 void Manager::loop() {

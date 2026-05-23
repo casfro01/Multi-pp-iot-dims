@@ -111,6 +111,38 @@
         }
       }
     },
+    "/api/auth/SetDisplayName": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_SetDisplayName",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetDisplayNameRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Quiz/GetQuizzes": {
       "get": {
         "tags": [
@@ -231,6 +263,25 @@
           },
           "userName": {
             "type": "string"
+          }
+        }
+      },
+      "SetDisplayNameRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "deviceId": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 3
           }
         }
       },

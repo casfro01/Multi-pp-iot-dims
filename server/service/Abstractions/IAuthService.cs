@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using api.Controllers;
 using service.Models.Request;
 using service.Models.Responses;
 
@@ -10,4 +11,5 @@ public interface IAuthService
     Task<AuthUserInfo> Register(RegisterRequest request);
     
     Task<AuthUserInfo?> GetUserInfo(String id);
+    Task<string> SetDisplayName(SetDisplayNameRequest request);
 }

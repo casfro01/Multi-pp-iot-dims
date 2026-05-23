@@ -15,7 +15,8 @@ class LedController {
             PULSE,
             RAINBOW,
             WAVE,
-            BREATHING
+            BREATHING,
+            RAINBOW_BLINK
         };
         AnimationType currentAnimation = NONE;
         Color animationColor = Color(0, 0, 0);
@@ -63,8 +64,11 @@ class LedController {
         void startRainbow(int speedMs);
         void startWave(Color color, int speedMs);
         void startBreathing(Color color, int speedMs);
+        void startRainbowBlink(int speedMs);
 
         void stopAnimation();
+
+        Color randomColor();
 
         void loop();
 };
