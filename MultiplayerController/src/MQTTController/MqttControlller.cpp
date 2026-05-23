@@ -38,7 +38,7 @@ void MqttController::connectToWiFi() {
 void MqttController::onCommandReceived(char* topic, uint8_t* payload, unsigned int length) {
     Serial.print("Received command on topic: ");
     Serial.println(topic);
-    if (strcmp(topic, MQTT_COMMAND_ANIMATION) == 0) {
+    if (strcmp(topic, MQTT_COMMAND_ANIMATION.c_str()) == 0) {
         String message;
         for (unsigned int i = 0; i < length; i++) {
             message += (char)payload[i];
@@ -46,7 +46,7 @@ void MqttController::onCommandReceived(char* topic, uint8_t* payload, unsigned i
         Serial.println(message);
         lightAnimationCommandHandler(message.c_str());
     } 
-    else if (strcmp(topic, MQTT_COMMAND_SET_NAME) == 0) {
+    else if (strcmp(topic, MQTT_COMMAND_SET_NAME.c_str()) == 0) {
         String message;
         for (unsigned int i = 0; i < length; i++) {
             message += (char)payload[i];
@@ -92,19 +92,19 @@ void MqttController::setButtonController(ButtonController& controller) {
     // ButtonController expects plain function pointers. Use static wrappers.
     buttonController->setCallbackGreen([this]() {
         Serial.println("Green button callback triggered");
-        this->publishButtonData("Green");
+        this->publishButtonData(String("Green").c_str());
     });
     buttonController->setCallbackRed([this]() {
         Serial.println("Red button callback triggered");
-        this->publishButtonData("Red");
+        this->publishButtonData(String("Red").c_str());
     });
     buttonController->setCallbackYellow([this]() {
         Serial.println("Yellow button callback triggered");
-        this->publishButtonData("Yellow");
+        this->publishButtonData(String("Yellow").c_str());
     });
     buttonController->setCallbackBlue([this]() {
         Serial.println("Blue button callback triggered");
-        this->publishButtonData("Blue");
+        this->publishButtonData(String("Blue").c_str());
     });
     buttonController->setCallbackConnect([this](int* codeSequence, int length) {
         this->codeSequence = codeSequence;
@@ -114,23 +114,28 @@ void MqttController::setButtonController(ButtonController& controller) {
         for (int i = 0; i < length; i++) {
             message += String(codeSequence[i]) + "";
         }
-        message += "\"}";
+        message += "\", \"DisplayName\":\"" + String(this->display_name) + "\"";
+        message += ", \"DeviceID\":\"" + String(DEVICE_ID) + "\"}";
         Serial.println(message);
-        publishData(MQTT_CONNECT_TOPIC, message.c_str());
+        publishData(MQTT_CONNECT_TOPIC.c_str(), message.c_str());
         ledController->startBlink(Color(0, 255, 255), 1, 150); // Blink cyan on successful code entry
     });
     buttonController->setWhileTypingCode([this]() {
-        ledController->startBlink(Color(255, 255, 0), 1200, 100); // Blink yellow while typing code
+        ledController->startRainbowBlink(100);
     });
 }
 
-void MqttController::publishButtonData(char* buttonColor) {
+void MqttController::publishButtonData(const char* buttonColor) {
+    if (codeSequence == nullptr || codeLength == 0) {
+        Serial.println("Nowhere to send data, pointless to send at nothing.");
+        return;
+    }
     String codemes = "";
     for (int i = 0; i < this->codeLength; i++) {
         codemes += String(this->codeSequence[i]) + "";
     }
-    String message = "{\"Button\":\"" + String(buttonColor) + "\"," + "ConnectCode\":\"" + String(this->codeSequence[0]) + "\"}";
-    publishData(MQTT_TOPIC, message.c_str());
+    String message = "{\"Button\":\"" + String(buttonColor) + "\",\"ConnectCode\":\"" + codemes + "\"}";
+    publishData(MQTT_TOPIC.c_str(), message.c_str());
 }
 
 void MqttController::connectToMQTT() {
@@ -148,11 +153,13 @@ void MqttController::connectToMQTT() {
 }
 
 void MqttController::subscribeToCommands() {
-    client.subscribe(MQTT_COMMAND_ANIMATION);
-    client.subscribe(MQTT_COMMAND_SET_NAME);
+    client.subscribe(MQTT_COMMAND_ANIMATION.c_str());
+    client.subscribe(MQTT_COMMAND_SET_NAME.c_str());
 }
 
 void MqttController::publishData(const char* path, const char* payload) {
+    Serial.println(String(MQTT_TOPIC));
+    Serial.println(String(MQTT_CONNECT_TOPIC));
     if (client.publish(path, payload)) {
         Serial.println("Data published successfully!");
     } else {

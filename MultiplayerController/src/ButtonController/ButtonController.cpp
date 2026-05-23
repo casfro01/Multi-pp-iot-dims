@@ -133,7 +133,7 @@ void ButtonController::loop() {
         }
     }
 
-    if (blueState == HIGH && lastBlueState == HIGH && redState == HIGH && lastRedState == HIGH){
+    if (greenState == LOW && lastGreenState == LOW && redState == LOW && lastRedState == LOW){
         if (typeCode == false && lastTimeTaken == 0){
             Serial.println("Type code button pressed");
             lastTimeTaken = millis();

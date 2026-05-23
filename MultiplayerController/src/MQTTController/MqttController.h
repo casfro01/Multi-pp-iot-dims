@@ -7,7 +7,7 @@
 
 class MqttController {
     private:
-        char* display_name;
+        char* display_name = (char*) "None";
 
         WiFiClient espClient;
         PubSubClient client;
@@ -21,7 +21,7 @@ class MqttController {
         void onCommandReceived(char* topic, uint8_t* payload, unsigned int length);
         void lightAnimationCommandHandler(const char* message);
 
-        void publishButtonData(char* buttonColor);
+        void publishButtonData(const char* buttonColor);
     
     public:
         MqttController();
