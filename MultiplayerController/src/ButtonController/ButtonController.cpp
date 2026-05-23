@@ -20,13 +20,27 @@ ButtonController::ButtonController(int redPin, int yellowPin, int greenPin, int 
 
 
 void ButtonController::loop() {
+    unsigned long now = millis();
     bool redState = digitalRead(redPin);
     bool yellowState = digitalRead(yellowPin);
     bool greenState = digitalRead(greenPin);
     bool blueState = digitalRead(bluePin);
 
+
+    // Debounce each pin — only commit a state change after it's been stable for DEBOUNCE_MS
+    if (redState != lastRawRedState) lastDebounceRed = now; lastRawRedState = redState;
+    if (yellowState != lastRawYellowState) lastDebounceYellow = now; lastRawYellowState = yellowState;
+    if (greenState != lastRawGreenState) lastDebounceGreen = now; lastRawGreenState = greenState;
+    if (blueState != lastRawBlueState) lastDebounceBlue = now; lastRawBlueState = blueState;
+
+    bool stableRed = (now - lastDebounceRed)    >= DEBOUNCE_MS ? redState : lastRedState;
+    bool stableYellow = (now - lastDebounceYellow) >= DEBOUNCE_MS ? yellowState : lastYellowState;
+    bool stableGreen = (now - lastDebounceGreen)  >= DEBOUNCE_MS ? greenState : lastGreenState;
+    bool stableBlue = (now - lastDebounceBlue)   >= DEBOUNCE_MS ? blueState : lastBlueState;
+
+
     // Red button
-    if (redState == LOW && lastRedState == HIGH) {
+    if (stableRed == LOW && lastRedState == HIGH) {
         Serial.println("Red button pressed");
         if (typeCode == true){
             codeSequence[codeIndex] = 1;
@@ -53,7 +67,7 @@ void ButtonController::loop() {
     }
 
     // Yellow button
-    if (yellowState == LOW && lastYellowState == HIGH) {
+    if (stableYellow == LOW && lastYellowState == HIGH) {
         Serial.println("Yellow button pressed");
         if (typeCode == true){
             codeSequence[codeIndex] = 3;
@@ -80,7 +94,7 @@ void ButtonController::loop() {
     }
 
     // Green button
-    if (greenState == LOW && lastGreenState == HIGH) {
+    if (stableGreen == LOW && lastGreenState == HIGH) {
         Serial.println("Green button pressed");
         if (typeCode == true){
             codeSequence[codeIndex] = 4;
@@ -107,7 +121,7 @@ void ButtonController::loop() {
     }
 
     // Blue button
-    if (blueState == LOW && lastBlueState == HIGH) {
+    if (stableBlue == LOW && lastBlueState == HIGH) {
         Serial.println("Blue button pressed");
         if (typeCode == true){
             codeSequence[codeIndex] = 2;
@@ -133,7 +147,7 @@ void ButtonController::loop() {
         }
     }
 
-    if (greenState == LOW && lastGreenState == LOW && redState == LOW && lastRedState == LOW){
+    if (stableGreen == LOW && lastGreenState == LOW && stableRed == LOW && lastRedState == LOW){
         if (typeCode == false && lastTimeTaken == 0){
             Serial.println("Type code button pressed");
             lastTimeTaken = millis();
@@ -152,10 +166,10 @@ void ButtonController::loop() {
     }
 
     // Save previous states
-    lastRedState = redState;
-    lastYellowState = yellowState;
-    lastGreenState = greenState;
-    lastBlueState = blueState;
+    lastRedState = stableRed;
+    lastYellowState = stableYellow;
+    lastGreenState = stableGreen;
+    lastBlueState = stableBlue;
 }
 
 void ButtonController::setCallbackGreen(std::function<void()> callback) {

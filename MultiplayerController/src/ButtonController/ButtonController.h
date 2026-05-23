@@ -5,14 +5,29 @@
 
 class ButtonController {
     private:
+        static const unsigned long DEBOUNCE_MS = 30;
+
         int redPin;
         int yellowPin;
         int greenPin;
         int bluePin;
+
         bool lastRedState = true;
         bool lastYellowState = true;
         bool lastGreenState = true;
         bool lastBlueState = true;
+
+        bool lastRawRedState = true;
+        bool lastRawYellowState = true;
+        bool lastRawGreenState = true;
+        bool lastRawBlueState = true;
+
+        unsigned long lastDebounceRed = 0;
+        unsigned long lastDebounceYellow = 0;
+        unsigned long lastDebounceGreen = 0;
+        unsigned long lastDebounceBlue = 0;
+
+
         bool typeCode = false;
         unsigned long lastTimeTaken = 0;
         int codeIndex = 0;

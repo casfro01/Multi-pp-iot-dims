@@ -6,7 +6,7 @@ export type PairingPayload = {
 
 export function mapToPairingPayload(raw: any): PairingPayload {
     return {
-        DeviceId: raw.DeviceId,
+        DeviceId: raw.DeviceID,
         Code: raw.Code,
         DisplayName: raw.DisplayName,
     }

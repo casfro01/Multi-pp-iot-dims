@@ -109,7 +109,7 @@ void MqttController::setButtonController(ButtonController& controller) {
     buttonController->setCallbackConnect([this](int* codeSequence, int length) {
         this->codeSequence = codeSequence;
         this->codeLength = length;
-        String message = "{\"ConnectCode\":\"";
+        String message = "{\"Code\":\"";
         Serial.println("Connect callback triggered with code sequence:");
         for (int i = 0; i < length; i++) {
             message += String(codeSequence[i]) + "";

@@ -12,9 +12,9 @@ public class DeviceListener(ISseBackplane backplane) : MqttController, IPublishe
     //[Deprecated]
     private const string MqttRoute = "my/topic";
 
-    private const string ConnectTopic = "controller/{deviceId}/connectcode";
+    private const string ConnectTopic = "controller/+/connectcode";
 
-    [MqttRoute(MqttRoute)]
+    [MqttRoute(ConnectTopic)]
     public async Task CollectDeviceConnection(PairingRequest pairing)
     {
         await NotifySubscribers(pairing);

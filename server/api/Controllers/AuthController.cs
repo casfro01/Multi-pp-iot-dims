@@ -1,6 +1,7 @@
 ﻿using System.Runtime.ExceptionServices;
 using System.Security.Claims;
 using System.Text.Json;
+using api.Controllers.MQTT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using service.Abstractions;
@@ -13,7 +14,7 @@ namespace api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(IAuthService service, ITokenService tokenService) : ControllerBase
+public class AuthController(IAuthService service, ITokenService tokenService, DeviceCommandSender commandSender) : ControllerBase
 {
     [HttpPost]
     [Route("login")]
@@ -58,6 +59,7 @@ public class AuthController(IAuthService service, ITokenService tokenService) : 
         
         request.UserId = requestUserId;
         string displayName = await service.SetDisplayName(request);
+        await commandSender.SendDisplayNameCommand(request.DeviceId, displayName);
         return displayName;
     }
 }

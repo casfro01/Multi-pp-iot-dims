@@ -55,6 +55,8 @@ public class AuthService(MyDbContext ctx, IPasswordHasher<User> hasher) : IAuthS
 
     public async Task<string> SetDisplayName(SetDisplayNameRequest request)
     {
+        Validator.ValidateObject(request, new ValidationContext(request), true);
+        
         var user = await ctx.Users.FirstOrDefaultAsync(u => u.Id.Equals(request.UserId));
         if (user == null) throw new ValidationException("What user??");
         var udl = await ctx.UserDeviceLinks.FirstOrDefaultAsync(d => d.DeviceId.Equals(request.DeviceId));
