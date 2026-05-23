@@ -11,5 +11,4 @@ public interface IAuthService
     Task<AuthUserInfo> Register(RegisterRequest request);
     
     Task<AuthUserInfo?> GetUserInfo(String id);
-    Task<string> SetDisplayName(SetDisplayNameRequest request);
 }

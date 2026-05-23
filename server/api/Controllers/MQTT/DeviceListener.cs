@@ -1,16 +1,19 @@
 ﻿using Mqtt.Controllers;
 using System.Text.Json;
+using service;
 using service.Abstractions;
 using service.Models.Request;
 using StateleSSE.AspNetCore;
 
 namespace api.Controllers.MQTT;
 
-public class DeviceListener(ISseBackplane backplane) : MqttController, IPublisher<PairingRequest>
+public class DeviceListener(ISseBackplane backplane, IDisplayNameService dService, DeviceCommandSender commandSender) : MqttController, IPublisher<PairingRequest>
 {
     private const string GroupId = "deviceJoin"; // ved ikke om denne er nødvendig siden vi bare bruger lobbykoden til at adskille grupperne
     //[Deprecated]
     private const string MqttRoute = "my/topic";
+
+    private const string GetNameEvent = "controller/{deviceId}/getname";
 
     private const string ConnectTopic = "controller/+/connectcode";
 
@@ -18,6 +21,13 @@ public class DeviceListener(ISseBackplane backplane) : MqttController, IPublishe
     public async Task CollectDeviceConnection(PairingRequest pairing)
     {
         await NotifySubscribers(pairing);
+    }
+
+    [MqttRoute(GetNameEvent)]
+    public async Task GetName(string deviceId, string somethingElse)
+    {
+        string name = await dService.GetDisplayName(deviceId);
+        await commandSender.SendDisplayNameCommand(deviceId, name);
     }
 
     /// <summary>
