@@ -1,17 +1,28 @@
 #include "LcdController.h"
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
-LcdController::LcdController() {
-    // Initialize the LCD here (e.g., set up I2C communication, configure pins, etc.)
+LcdController::LcdController(int sdaPin, int sclPin) : lcd(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS) {
+    this->sdaPin = sdaPin;
+    this->sclPin = sclPin;
 }
 
 void LcdController::lcdInit() {
-    // Code to initialize the LCD display
+    Wire.begin(sdaPin, sclPin);
+    lcd.init();
+    lcd.backlight();
+
+    lcdPrint("None");
 }
 
 void LcdController::lcdPrint(const char* str) {
-    // Code to print a string to the LCD display
+    this->lcdClear();
+    lcd.setCursor(0,0);
+    lcd.print("Name: ");
+    lcd.setCursor(0,1);
+    lcd.print(str);
 }
 
 void LcdController::lcdClear() {
-    // Code to clear the LCD display
+    lcd.clear();
 }

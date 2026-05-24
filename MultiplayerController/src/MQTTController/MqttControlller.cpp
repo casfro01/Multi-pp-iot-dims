@@ -16,6 +16,9 @@ void MqttController::init() {
 
     connectToMQTT();
     subscribeToCommands();
+
+    // call get name event
+    publishData(MQTT_REQUEST_NAME_TOPIC.c_str(), "MumseSovs");
 }
 
 void MqttController::connectToWiFi() {
@@ -52,8 +55,8 @@ void MqttController::onCommandReceived(char* topic, uint8_t* payload, unsigned i
             message += (char)payload[i];
         }
         this->display_name = strdup(message.c_str()); // Store the new display name (ensure to free old name if necessary)
-        // indsæt opdatering at LCD
-        Serial.println(message);
+
+        lcdController->lcdPrint(display_name);
     }
     else {
         Serial.println("Unknown command topic");
@@ -87,6 +90,11 @@ void MqttController::lightAnimationCommandHandler(const char* message) {
 void MqttController::setLedController(LedController& controller) {
     ledController = &controller;
 }
+
+void MqttController::setLcdController(LcdController& controller) {
+    lcdController = &controller;
+}
+
 void MqttController::setButtonController(ButtonController& controller) {
     buttonController = &controller;
     // ButtonController expects plain function pointers. Use static wrappers.

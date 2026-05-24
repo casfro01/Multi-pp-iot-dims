@@ -4,6 +4,7 @@
 #include <PubSubClient.h>
 #include "../LedController/LedController.h"
 #include "../ButtonController/ButtonController.h"
+#include "../LcdController/LcdController.h"
 
 class MqttController {
     private:
@@ -11,8 +12,11 @@ class MqttController {
 
         WiFiClient espClient;
         PubSubClient client;
+
         LedController* ledController;
         ButtonController* buttonController;
+        LcdController* lcdController;
+
         int* codeSequence = nullptr;
         int codeLength = 0;
         void connectToWiFi();
@@ -31,6 +35,7 @@ class MqttController {
 
         void setLedController(LedController& controller);
         void setButtonController(ButtonController& controller);
+        void setLcdController(LcdController& controller);
 };
 
 #endif

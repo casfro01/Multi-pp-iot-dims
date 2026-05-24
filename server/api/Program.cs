@@ -40,6 +40,7 @@ public class Program
         services.AddScoped<ITokenService, JwtService>();
         services.AddScoped<IQuizService, QuizService>(); 
         services.AddScoped<IPasswordHasher<User>, NSecArgon2IdPasswordHasher>();
+        services.AddScoped<IDisplayNameService, DisplayNameService>();
         
         services.AddScoped<IPublisher<PairingRequest>, DeviceListener>();
         services.AddScoped<IPublisher<ButtonPressRequest>, ButtonPressListener>();
