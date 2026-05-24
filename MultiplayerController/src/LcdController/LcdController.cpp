@@ -11,6 +11,8 @@ void LcdController::lcdInit() {
     Wire.begin(sdaPin, sclPin);
     lcd.init();
     lcd.backlight();
+
+    lcdPrint("None");
 }
 
 void LcdController::lcdPrint(const char* str) {

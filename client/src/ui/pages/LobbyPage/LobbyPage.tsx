@@ -40,7 +40,7 @@ function LobbyPage() {
         setPlayers((prev) =>
           prev.some((p) => p.id === pairing.DeviceId)
             ? prev
-            : [...prev, { id: pairing.DeviceId, name: pairing.DeviceId }],
+            : [...prev, { id: pairing.DeviceId, name: pairing.DisplayName }],
         )
                 console.log(players)
       },
