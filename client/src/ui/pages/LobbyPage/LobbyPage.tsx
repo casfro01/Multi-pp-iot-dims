@@ -1,10 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router'
 import { useAtom } from 'jotai'
 import { ANSWER_VARIANTS, ANSWER_SHAPES } from '../../answerStyles'
 import { StateleSSEClient } from '../../../core/SseClientSecure'
 import { subClient } from '../../../core/api-clients'
 import { tokenAtom } from '../../../core/atoms/token'
+import {
+  pinCodeAtom,
+  playersAtom,
+  selectedQuizAtom,
+  sseClientAtom,
+  type Player,
+} from '../../../core/atoms/lobby'
+import type { BaseQuizResponse } from '../../../core/ServerAPI'
 import './LobbyPage.css'
 import {mapToPairingPayload, type PairingPayload} from "../../../core/Types/PairingPayload.ts";
 import type {Player} from "../../../core/Types/Player.ts";
@@ -20,18 +28,29 @@ function parsePinCode(code: string | undefined): number[] {
 
 function LobbyPage() {
   const navigate = useNavigate()
-  const [players, setPlayers] = useState<Player[]>([])
-  const [pinCode, setPinCode] = useState<string>('')
+  const location = useLocation()
   const [token] = useAtom(tokenAtom)
+  const [players, setPlayers] = useAtom(playersAtom)
+  const [pinCode, setPinCode] = useAtom(pinCodeAtom)
+  const [sseClient, setSseClient] = useAtom(sseClientAtom)
+  const [, setSelectedQuiz] = useAtom(selectedQuizAtom)
 
   const pinTiles = parsePinCode(pinCode)
 
   useEffect(() => {
-    const sseClient = new StateleSSEClient('/api/Subscriber/sse', 'connected', token)
-    const unsubscribe = sseClient.listen<PairingPayload | string>(
+    const incoming = (location.state as { category?: BaseQuizResponse } | null)?.category
+    if (incoming) setSelectedQuiz(incoming)
+  }, [location.state, setSelectedQuiz])
+
+  useEffect(() => {
+    if (sseClient || !token) return
+
+    const client = new StateleSSEClient('/api/Subscriber/sse', 'connected', token)
+    setSseClient(client)
+
+    client.listen<PairingPayload | string>(
       async (connectionId) => {
         const code = await subClient.subscribeToDeviceConnection(connectionId)
-        console.log(code);
         setPinCode(code)
         return { group: 'deviceJoin' + code, data: null }
       },
@@ -42,17 +61,12 @@ function LobbyPage() {
             ? prev
             : [...prev, { id: pairing.DeviceId, name: pairing.DisplayName }],
         )
-                console.log(players)
       },
     )
-    return () => {
-      unsubscribe()
-      sseClient.disconnect()
-    }
-  }, [token])
+  }, [token, sseClient, setSseClient, setPinCode, setPlayers])
 
   const handleStart = () => {
-    navigate(`/quiz/${pinCode}`)
+    navigate('/quiz')
   }
 
   return (
@@ -92,7 +106,6 @@ function LobbyPage() {
                 <div key={player.id} className="lobby-player">
                   {player.name}
                 </div>
-                
               ))}
             </div>
           )}

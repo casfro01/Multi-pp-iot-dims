@@ -43,6 +43,7 @@ public class Program
         services.AddScoped<IDisplayNameService, DisplayNameService>();
         
         services.AddScoped<IPublisher<PairingRequest>, DeviceListener>();
+        services.AddScoped<IPublisher<AnswerRequest>, QuizAnswerListener>();
         services.AddScoped<IPublisher<ButtonPressRequest>, ButtonPressListener>();
 
         services.AddScoped<DeviceCommandSender>();

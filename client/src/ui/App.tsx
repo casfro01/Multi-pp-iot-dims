@@ -6,6 +6,7 @@ import SignUpPage from "./pages/Frontpage/SignUpPage/SignUpPage.tsx";
 import DisplayFormattedDeviceConnection from "./pages/Frontpage/DisplayFormattedDeviceConnection.tsx";
 import CategoryPage from "./pages/CategoryPage/CategoryPage.tsx";
 import LobbyPage from "./pages/LobbyPage/LobbyPage.tsx";
+import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import LinkDevice from "./pages/LinkDevicePage/LinkDevice.tsx";
 import MainPage from "./pages/MainPage/MainPage.tsx";
 
@@ -52,18 +53,10 @@ function App() {
                               path: "/lobby",
                               element: <LobbyPage/>,
                           },
-                          /*{
-                              path: "/quiz/:sessionId",
+                          {
+                              path: "/quiz",
                               element: <QuizPage/>,
                           },
-                          {
-                              path: "/quiz/:sessionId/result",
-                              element: <QuestionResultPage/>,
-                          },
-                          {
-                              path: "/quiz/:sessionId/final",
-                              element: <FinalResultPage/>,
-                          },*/
                       ],
                   },
               ])}
