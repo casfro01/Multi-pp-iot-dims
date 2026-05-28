@@ -205,6 +205,42 @@ export class QuizClient {
         }
         return Promise.resolve<BaseQuizResponse[]>(null as any);
     }
+
+    getQuiz(id: number): Promise<QuizWithQuestionsResponse> {
+        let url_ = this.baseUrl + "/api/Quiz/GetQuiz/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetQuiz(_response);
+        });
+    }
+
+    protected processGetQuiz(response: Response): Promise<QuizWithQuestionsResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as QuizWithQuestionsResponse;
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<QuizWithQuestionsResponse>(null as any);
+    }
 }
 
 export class SubscriberClient {
@@ -283,6 +319,44 @@ export class SubscriberClient {
         }
         return Promise.resolve<string>(null as any);
     }
+
+    subscribeToQuizAnswers(connectionId: string | undefined, code: string | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Subscriber/SubscribeToQuizAnswers?";
+        if (connectionId === null)
+            throw new globalThis.Error("The parameter 'connectionId' cannot be null.");
+        else if (connectionId !== undefined)
+            url_ += "connectionId=" + encodeURIComponent("" + connectionId) + "&";
+        if (code === null)
+            throw new globalThis.Error("The parameter 'code' cannot be null.");
+        else if (code !== undefined)
+            url_ += "code=" + encodeURIComponent("" + code) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSubscribeToQuizAnswers(_response);
+        });
+    }
+
+    protected processSubscribeToQuizAnswers(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
 }
 
 export interface LoginResponse {
@@ -311,6 +385,24 @@ export interface AuthUserInfo {
 export interface BaseQuizResponse {
     id?: number;
     name: string;
+}
+
+export interface QuizWithQuestionsResponse {
+    id?: number;
+    name: string;
+    questions?: BaseQuestionResponse[];
+}
+
+export interface BaseQuestionResponse {
+    id?: number;
+    content?: string;
+    answers?: BaseAnswerResponse[];
+}
+
+export interface BaseAnswerResponse {
+    id?: number;
+    correct?: boolean;
+    content: string;
 }
 
 export interface FileResponse {

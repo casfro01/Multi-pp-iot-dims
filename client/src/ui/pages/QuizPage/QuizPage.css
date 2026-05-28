@@ -1,0 +1,111 @@
+.quiz-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+}
+
+.quiz-page__container {
+  width: 100%;
+  max-width: 80rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.quiz-meta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.quiz-question {
+  width: 100%;
+  background: var(--surface);
+  color: var(--text-on-light);
+  border-radius: 1.5rem;
+  padding: 3rem 2rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.quiz-question__text {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.quiz-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--color-primary);
+  font-size: 2.25rem;
+  font-weight: 900;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+}
+
+.quiz-answers {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .quiz-answers {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quiz-answer {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.75rem 1.5rem;
+  border-radius: 1.25rem;
+  color: #fff;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 800;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+  min-height: 6rem;
+}
+
+.quiz-answer--red {
+  background: var(--answer-red);
+}
+
+.quiz-answer--blue {
+  background: var(--answer-blue);
+}
+
+.quiz-answer--yellow {
+  background: var(--answer-yellow);
+}
+
+.quiz-answer--green {
+  background: var(--answer-green);
+}
+
+.quiz-answer__shape {
+  font-size: 2.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.quiz-answer__text {
+  flex: 1;
+}

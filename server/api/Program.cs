@@ -42,6 +42,7 @@ public class Program
         services.AddScoped<IPasswordHasher<User>, NSecArgon2IdPasswordHasher>();
         
         services.AddScoped<IPublisher<PairingRequest>, DeviceListener>();
+        services.AddScoped<IPublisher<AnswerRequest>, QuizAnswerListener>();
         
         // seeder
         //services.AddScoped<ISeeder, BogusSeed>();

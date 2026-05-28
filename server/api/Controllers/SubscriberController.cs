@@ -12,7 +12,10 @@ namespace api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SubscriberController(ISseBackplane backplane, IPublisher<PairingRequest> publisher) : ControllerBase
+public class SubscriberController(
+    ISseBackplane backplane,
+    IPublisher<PairingRequest> publisher,
+    IPublisher<AnswerRequest> answerPublisher) : ControllerBase
 {
     
     
@@ -99,5 +102,17 @@ public class SubscriberController(ISseBackplane backplane, IPublisher<PairingReq
         string code = LobbyCodeGenerator.GetANumberString();
         await publisher.AddSubscriber(new DeviceSubscriber(connectionId, code));
         return code;
+    }
+
+    /// <summary>
+    /// Tilføj hosten til at lytte på indkommende svar fra spillere for en given lobbykode
+    /// </summary>
+    /// <param name="connectionId">Hostens SSE forbindelses id</param>
+    /// <param name="code">Lobbykoden som spillerne indsender svar på</param>
+    [HttpGet(nameof(SubscribeToQuizAnswers))]
+    [Authorize]
+    public async Task SubscribeToQuizAnswers(string connectionId, string code)
+    {
+        await answerPublisher.AddSubscriber(new DeviceSubscriber(connectionId, code));
     }
 }

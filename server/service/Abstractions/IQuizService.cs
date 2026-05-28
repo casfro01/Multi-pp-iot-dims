@@ -5,5 +5,6 @@ namespace service.Abstractions;
 
 public interface IQuizService
 {
-    Task<List<BaseQuizResponse>> GetQuizzes(); 
+    Task<List<BaseQuizResponse>> GetQuizzes();
+    Task<QuizWithQuestionsResponse?> GetQuiz(int id);
 }

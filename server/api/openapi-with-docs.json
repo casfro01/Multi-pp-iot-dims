@@ -134,6 +134,38 @@
         }
       }
     },
+    "/api/Quiz/GetQuiz/{id}": {
+      "get": {
+        "tags": [
+          "Quiz"
+        ],
+        "operationId": "Quiz_GetQuiz",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizWithQuestionsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Subscriber/sse": {
       "get": {
         "tags": [
@@ -173,6 +205,37 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Subscriber/SubscribeToQuizAnswers": {
+      "get": {
+        "tags": [
+          "Subscriber"
+        ],
+        "operationId": "Subscriber_SubscribeToQuizAnswers",
+        "parameters": [
+          {
+            "name": "connectionId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -246,6 +309,68 @@
             "format": "int32"
           },
           "name": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "QuizWithQuestionsResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BaseQuestionResponse"
+            }
+          }
+        }
+      },
+      "BaseQuestionResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "string"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BaseAnswerResponse"
+            }
+          }
+        }
+      },
+      "BaseAnswerResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "content"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "correct": {
+            "type": "boolean"
+          },
+          "content": {
             "type": "string",
             "minLength": 1
           }

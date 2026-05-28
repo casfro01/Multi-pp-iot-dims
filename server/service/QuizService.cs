@@ -15,4 +15,13 @@ public class QuizService(MyDbContext db) : IQuizService
         var res = await query.ToListAsync();
         return res.Select(q => new BaseQuizResponse(q)).ToList();
     }
+
+    public async Task<QuizWithQuestionsResponse?> GetQuiz(int id)
+    {
+        Quiz? quiz = await db.Quizzes
+            .Include(q => q.Questions)
+            .ThenInclude(q => q.Answers)
+            .FirstOrDefaultAsync(q => q.Id == id);
+        return quiz is null ? null : new QuizWithQuestionsResponse(quiz);
+    }
 }
