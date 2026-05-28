@@ -21,7 +21,7 @@ public class ButtonPressListener(ISseBackplane backplane) : MqttController, IPub
     /// <summary>
     /// Subscribe to a device's buttonpress
     /// Subscriber id -> connection-string
-    /// Subscriber payload -> deviceId
+    /// Subscriber payload -> connectcode
     /// </summary>
     public async Task AddSubscriber(ISubscriber<string, string> subscriber)
     {
@@ -31,7 +31,7 @@ public class ButtonPressListener(ISseBackplane backplane) : MqttController, IPub
     public async Task NotifySubscribers(ButtonPressRequest obj)
     {
         var jsonData = JsonSerializer.Serialize(obj);
-        await backplane.Clients.SendToGroupAsync(obj.deviceId, jsonData);
+        await backplane.Clients.SendToGroupAsync(obj.ConnectCode, jsonData);
     }
     
 }

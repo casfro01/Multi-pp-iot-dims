@@ -143,6 +143,39 @@
         }
       }
     },
+    "/api/CommandSender/Blink": {
+      "post": {
+        "tags": [
+          "CommandSender"
+        ],
+        "operationId": "CommandSender_Blink",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlinkCommandRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Quiz/GetQuizzes": {
       "get": {
         "tags": [
@@ -257,7 +290,7 @@
             "x-position": 1
           },
           {
-            "name": "code",
+            "name": "pinCode",
             "in": "query",
             "schema": {
               "type": "string"
@@ -347,6 +380,70 @@
             "minLength": 3
           }
         }
+      },
+      "BlinkCommandRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          },
+          "command": {
+            "$ref": "#/components/schemas/LightCommands"
+          }
+        }
+      },
+      "LightCommands": {
+        "type": "integer",
+        "description": "",
+        "x-enum-names": [
+          "GreenBlink",
+          "RedBlink",
+          "YellowBlink",
+          "BlueBlink",
+          "Pulse",
+          "Train"
+        ],
+        "x-enum-varnames": [
+          "GreenBlink",
+          "RedBlink",
+          "YellowBlink",
+          "BlueBlink",
+          "Pulse",
+          "Train"
+        ],
+        "x-enumNames": [
+          "GreenBlink",
+          "RedBlink",
+          "YellowBlink",
+          "BlueBlink",
+          "Pulse",
+          "Train"
+        ],
+        "x-enum-descriptions": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "x-enumDescriptions": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
       },
       "BaseQuizResponse": {
         "type": "object",

@@ -15,7 +15,6 @@ import {
 import type { BaseQuizResponse } from '../../../core/ServerAPI'
 import './LobbyPage.css'
 import {mapToPairingPayload, type PairingPayload} from "../../../core/Types/PairingPayload.ts";
-import type {Player} from "../../../core/Types/Player.ts";
 
 function parsePinCode(code: string | undefined): number[] {
   if (!code) return []

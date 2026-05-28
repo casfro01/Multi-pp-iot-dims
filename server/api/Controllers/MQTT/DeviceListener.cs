@@ -16,7 +16,7 @@ public class DeviceListener(ISseBackplane backplane, IDisplayNameService dServic
     private const string GetNameEvent = "controller/{deviceId}/getname";
 
     private const string ConnectTopic = "controller/+/connectcode";
-
+    
     [MqttRoute(ConnectTopic)]
     public async Task CollectDeviceConnection(PairingRequest pairing)
     {

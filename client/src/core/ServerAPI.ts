@@ -200,6 +200,59 @@ export class AuthClient {
     }
 }
 
+export class CommandSenderClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    blink(request: BlinkCommandRequest): Promise<FileResponse> {
+        let url_ = this.baseUrl + "/api/CommandSender/Blink";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(request);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processBlink(_response);
+        });
+    }
+
+    protected processBlink(response: Response): Promise<FileResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            let fileNameMatch = contentDisposition ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(contentDisposition) : undefined;
+            let fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[3] || fileNameMatch[2] : undefined;
+            if (fileName) {
+                fileName = decodeURIComponent(fileName);
+            } else {
+                fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+                fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            }
+            return response.blob().then(blob => { return { fileName: fileName, data: blob, status: status, headers: _headers }; });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FileResponse>(null as any);
+    }
+}
+
 export class QuizClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
@@ -357,16 +410,16 @@ export class SubscriberClient {
         return Promise.resolve<string>(null as any);
     }
 
-    subscribeToQuizAnswers(connectionId: string | undefined, code: string | undefined): Promise<void> {
+    subscribeToQuizAnswers(connectionId: string | undefined, pinCode: string | undefined): Promise<void> {
         let url_ = this.baseUrl + "/api/Subscriber/SubscribeToQuizAnswers?";
         if (connectionId === null)
             throw new globalThis.Error("The parameter 'connectionId' cannot be null.");
         else if (connectionId !== undefined)
             url_ += "connectionId=" + encodeURIComponent("" + connectionId) + "&";
-        if (code === null)
-            throw new globalThis.Error("The parameter 'code' cannot be null.");
-        else if (code !== undefined)
-            url_ += "code=" + encodeURIComponent("" + code) + "&";
+        if (pinCode === null)
+            throw new globalThis.Error("The parameter 'pinCode' cannot be null.");
+        else if (pinCode !== undefined)
+            url_ += "pinCode=" + encodeURIComponent("" + pinCode) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -424,6 +477,20 @@ export interface SetDisplayNameRequest {
     deviceId?: string;
     code?: string;
     displayName?: string;
+}
+
+export interface BlinkCommandRequest {
+    deviceId?: string;
+    command?: LightCommands;
+}
+
+export enum LightCommands {
+    GreenBlink = 0,
+    RedBlink = 1,
+    YellowBlink = 2,
+    BlueBlink = 3,
+    Pulse = 4,
+    Train = 5,
 }
 
 export interface BaseQuizResponse {
