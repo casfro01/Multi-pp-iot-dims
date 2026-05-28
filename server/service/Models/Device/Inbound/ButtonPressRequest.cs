@@ -1,6 +1,6 @@
 ﻿namespace api.Controllers.MQTT;
 
-public record ButtonPressRequest(string deviceId, ButtonPressRequest.Button button)
+public record ButtonPressRequest(string deviceId, ButtonPressRequest.Button button, string ConnectCode)
 {
 
     public enum Button

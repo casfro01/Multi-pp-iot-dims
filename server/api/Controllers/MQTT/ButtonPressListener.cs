@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
 using Mqtt.Controllers;
+using NLog;
 using service.Abstractions;
+using service.Models.Request;
 using StateleSSE.AspNetCore;
 
 namespace api.Controllers.MQTT;
@@ -10,9 +12,10 @@ public class ButtonPressListener(ISseBackplane backplane) : MqttController, IPub
     private const string ButtonPressRoute = "controller/{deviceId}/buttonpress";
 
     [MqttRoute(ButtonPressRoute)]
-    public async Task CollectButtonPress(string deviceId, string message)
+    public async Task CollectButtonPress(string deviceId, ButtonPressRaw message)
     {
-        await NotifySubscribers(new ButtonPressRequest(deviceId, ButtonPressRequest.GetButtonFromString(message)));
+        Console.WriteLine(message);
+        await NotifySubscribers(new ButtonPressRequest(deviceId, ButtonPressRequest.GetButtonFromString(message.Button), message.ConnectCode));
     }
     
     /// <summary>
