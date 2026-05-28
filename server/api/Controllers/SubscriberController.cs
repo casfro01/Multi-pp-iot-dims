@@ -13,7 +13,7 @@ namespace api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SubscriberController(ISseBackplane backplane, IPublisher<PairingRequest> publisher, IPublisher<ButtonPressRequest> buttonPublisher, IPublisher<AnswerRequest> answerPublisher) : ControllerBase
+public class SubscriberController(ISseBackplane backplane, IPublisher<PairingRequest> publisher, IPublisher<ButtonPressRequest> buttonPublisher) : ControllerBase
 {
     [HttpGet("sse")]
     [Authorize]

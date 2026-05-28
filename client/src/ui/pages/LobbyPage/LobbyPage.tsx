@@ -10,7 +10,6 @@ import {
   playersAtom,
   selectedQuizAtom,
   sseClientAtom,
-  type Player,
 } from '../../../core/atoms/lobby'
 import type { BaseQuizResponse } from '../../../core/ServerAPI'
 import './LobbyPage.css'

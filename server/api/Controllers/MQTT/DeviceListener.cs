@@ -10,8 +10,6 @@ namespace api.Controllers.MQTT;
 public class DeviceListener(ISseBackplane backplane, IDisplayNameService dService, DeviceCommandSender commandSender) : MqttController, IPublisher<PairingRequest>
 {
     private const string GroupId = "deviceJoin"; // ved ikke om denne er nødvendig siden vi bare bruger lobbykoden til at adskille grupperne
-    //[Deprecated]
-    private const string MqttRoute = "my/topic";
 
     private const string GetNameEvent = "controller/{deviceId}/getname";
 
