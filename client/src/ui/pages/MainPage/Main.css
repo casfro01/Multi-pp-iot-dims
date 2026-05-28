@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+/* ── Main Page — scoped under .mp- prefix ── */
+
+.mp-bg {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.mp-bg__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+}
+
+.mp-bg__orb--1 {
+    width: 500px;
+    height: 500px;
+    background: var(--color-secondary);
+    top: -120px;
+    right: -100px;
+    animation: mp-drift 12s ease-in-out infinite alternate;
+}
+
+.mp-bg__orb--2 {
+    width: 380px;
+    height: 380px;
+    background: var(--answer-blue);
+    bottom: -80px;
+    left: -80px;
+    animation: mp-drift 16s ease-in-out infinite alternate-reverse;
+}
+
+.mp-bg__orb--3 {
+    width: 260px;
+    height: 260px;
+    background: var(--color-primary);
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: mp-drift 10s ease-in-out infinite alternate;
+}
+
+@keyframes mp-drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(20px, 30px) scale(1.08); }
+}
+
+/* ── Page ── */
+.mp-page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+/* ── Card ── */
+.mp-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 2.5rem 2.25rem;
+    box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    animation: mp-cardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes mp-cardIn {
+    from { opacity: 0; transform: translateY(28px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Brand ── */
+.mp-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+    animation: mp-fadeUp 0.5s 0.1s both;
+}
+
+.mp-brand__mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--color-secondary), var(--answer-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+}
+
+.mp-brand__name {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--text-on-dark);
+}
+
+/* ── Heading ── */
+.mp-heading {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    color: var(--text-on-dark);
+    margin-bottom: 0.5rem;
+    animation: mp-fadeUp 0.5s 0.15s both;
+}
+
+.mp-subheading {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 2rem;
+    animation: mp-fadeUp 0.5s 0.2s both;
+}
+
+/* ── Action buttons ── */
+.mp-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.mp-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1.1rem 1.25rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-on-dark);
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    text-decoration: none;
+    animation: mp-fadeUp 0.5s both;
+}
+
+.mp-btn:nth-child(1) { animation-delay: 0.25s; }
+.mp-btn:nth-child(2) { animation-delay: 0.35s; }
+
+.mp-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.mp-btn--primary {
+    background: linear-gradient(135deg, var(--color-secondary), var(--answer-blue));
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.35);
+}
+
+.mp-btn--primary:hover {
+    background: linear-gradient(135deg, #00e5ff, var(--color-secondary));
+    border-color: transparent;
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.mp-btn__left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.mp-btn__icon {
+    font-size: 1.2rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.mp-btn__label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1rem;
+}
+
+.mp-btn__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Sora', sans-serif;
+}
+
+.mp-btn__desc {
+    font-size: 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    opacity: 0.65;
+}
+
+.mp-btn__arrow {
+    font-size: 1.1rem;
+    opacity: 0.7;
+    transition: transform 0.2s, opacity 0.2s;
+    flex-shrink: 0;
+}
+
+.mp-btn:hover .mp-btn__arrow {
+    transform: translateX(4px);
+    opacity: 1;
+}
+
+/* ── Animations ── */
+@keyframes mp-fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

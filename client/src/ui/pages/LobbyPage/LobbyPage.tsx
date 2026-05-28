@@ -14,18 +14,8 @@ import {
 } from '../../../core/atoms/lobby'
 import type { BaseQuizResponse } from '../../../core/ServerAPI'
 import './LobbyPage.css'
-
-type PairingPayload = {
-  DeviceId: string
-  Code: string
-}
-
-function mapPayload(raw: any): PairingPayload {
-  return {
-    DeviceId: raw.DeviceId,
-    Code: raw.Code,
-  }
-}
+import {mapToPairingPayload, type PairingPayload} from "../../../core/Types/PairingPayload.ts";
+import type {Player} from "../../../core/Types/Player.ts";
 
 function parsePinCode(code: string | undefined): number[] {
   if (!code) return []
@@ -65,12 +55,11 @@ function LobbyPage() {
         return { group: 'deviceJoin' + code, data: null }
       },
       (raw) => {
-        const pairing: PairingPayload =
-          typeof raw === 'string' ? mapPayload(JSON.parse(raw)) : raw
-        setPlayers((prev: Player[]) =>
+        const pairing: PairingPayload = typeof raw === 'string' ? mapToPairingPayload(JSON.parse(raw)): raw
+        setPlayers((prev) =>
           prev.some((p) => p.id === pairing.DeviceId)
             ? prev
-            : [...prev, { id: pairing.DeviceId, name: pairing.DeviceId }],
+            : [...prev, { id: pairing.DeviceId, name: pairing.DisplayName }],
         )
       },
     )

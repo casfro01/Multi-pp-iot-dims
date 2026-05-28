@@ -7,6 +7,8 @@ import DisplayFormattedDeviceConnection from "./pages/Frontpage/DisplayFormatted
 import CategoryPage from "./pages/CategoryPage/CategoryPage.tsx";
 import LobbyPage from "./pages/LobbyPage/LobbyPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
+import LinkDevice from "./pages/LinkDevicePage/LinkDevice.tsx";
+import MainPage from "./pages/MainPage/MainPage.tsx";
 
 function App() {
   return (
@@ -30,6 +32,14 @@ function App() {
                           {
                               path: "/signup",
                               element: <SignUpPage/>
+                          },
+                          {
+                              path: "/linkdevice",
+                              element: <LinkDevice/>
+                          },
+                          {
+                              path: "/main",
+                              element: <MainPage/>
                           },
                           {
                               path: "/temp",

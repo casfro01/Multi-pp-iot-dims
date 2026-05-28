@@ -40,9 +40,13 @@ public class Program
         services.AddScoped<ITokenService, JwtService>();
         services.AddScoped<IQuizService, QuizService>(); 
         services.AddScoped<IPasswordHasher<User>, NSecArgon2IdPasswordHasher>();
+        services.AddScoped<IDisplayNameService, DisplayNameService>();
         
         services.AddScoped<IPublisher<PairingRequest>, DeviceListener>();
         services.AddScoped<IPublisher<AnswerRequest>, QuizAnswerListener>();
+        services.AddScoped<IPublisher<ButtonPressRequest>, ButtonPressListener>();
+
+        services.AddScoped<DeviceCommandSender>();
         
         // seeder
         //services.AddScoped<ISeeder, BogusSeed>();

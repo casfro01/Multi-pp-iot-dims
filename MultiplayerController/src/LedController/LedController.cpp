@@ -4,6 +4,9 @@
 #include "../Models/ColorModel/Color.h"
 #include "../Models/LedModel/Led.h"
 
+LedController::LedController() {
+    // default constructor, should not use
+}
 
 // helper
 Color wheel(int position) {
@@ -79,7 +82,6 @@ void LedController::startBlink(Color color, int times, int speedMs) {
 
 void LedController::startTrain(Color color, int speedMs) {
     stopAnimation();
-
     currentAnimation = TRAIN;
 
     animationColor = color;
@@ -152,6 +154,27 @@ void LedController::startBreathing(Color color, int speedMs) {
 
     lastStep = millis();
 }
+
+
+void LedController::startRainbowBlink(int speedMs) {
+    stopAnimation();
+
+    currentAnimation = RAINBOW_BLINK;
+
+    blinkState = false;
+
+    animationDuration = speedMs;
+    lastStep = millis();
+}
+
+Color LedController::randomColor() {
+    return Color(
+        random(0, 256),
+        random(0, 256),
+        random(0, 256)
+    );
+}
+
     //Animation	Good Speed
     //Pulse	15-30ms
     //Rainbow	20-40ms
@@ -185,19 +208,43 @@ void LedController::loop() {
             break;
         }
 
+        case RAINBOW_BLINK: {
+
+            if (now - lastStep >= animationDuration) {
+
+                lastStep = now;
+
+                blinkState = !blinkState;
+
+                Color color = randomColor();
+
+                for (int i = 0; i < count; i++) {
+
+                    leds[i].setColor(
+                        blinkState
+                            ? color
+                            : Color(0, 0, 0)
+                    );
+                }
+            }
+
+            break;
+        }
+
         case TRAIN: {
             if (now - lastStep >= animationDuration) {
                 lastStep = now;
+
+                if (trainIndex >= count) {
+                    stopAnimation();
+                    break;
+                }
 
                 clearAll();
 
                 leds[trainIndex].setColor(animationColor);
 
                 trainIndex++;
-
-                if (trainIndex >= count) {
-                    stopAnimation();
-                }
             }
             break;
         }

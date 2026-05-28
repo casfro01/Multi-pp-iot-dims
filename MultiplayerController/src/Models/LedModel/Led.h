@@ -22,6 +22,7 @@ class Led {
         bool ledOn = true;
     
     public:
+        Led(); // default -> should not use!
         Led(int redPin, int greenPin, int bluePin, int redChannel, int greenChannel, int blueChannel);
         void setColor(Color color);
         void blinkAnimation(int seconds);

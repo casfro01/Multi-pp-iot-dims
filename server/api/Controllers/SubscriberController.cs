@@ -1,5 +1,6 @@
 ﻿using System.Runtime.ExceptionServices;
 using System.Text.Json;
+using api.Controllers.MQTT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using service.Abstractions;
@@ -12,14 +13,8 @@ namespace api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SubscriberController(
-    ISseBackplane backplane,
-    IPublisher<PairingRequest> publisher,
-    IPublisher<AnswerRequest> answerPublisher) : ControllerBase
+public class SubscriberController(ISseBackplane backplane, IPublisher<PairingRequest> publisher, IPublisher<ButtonPressRequest> buttonPublisher) : ControllerBase
 {
-    
-    
-    
     [HttpGet("sse")]
     [Authorize]
     public async Task Connect()

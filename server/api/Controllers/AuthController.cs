@@ -1,8 +1,10 @@
 ﻿using System.Runtime.ExceptionServices;
 using System.Security.Claims;
 using System.Text.Json;
+using api.Controllers.MQTT;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using service;
 using service.Abstractions;
 using service.Models.Responses;
 using service.Security;
@@ -13,7 +15,7 @@ namespace api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(IAuthService service, ITokenService tokenService) : ControllerBase
+public class AuthController(IAuthService service, ITokenService tokenService, DeviceCommandSender commandSender, IDisplayNameService dService) : ControllerBase
 {
     [HttpPost]
     [Route("login")]
@@ -47,5 +49,18 @@ public class AuthController(IAuthService service, ITokenService tokenService) : 
     {
         var userID = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return await service.GetUserInfo(userID);
+    }
+    
+    [HttpPost(nameof(SetDisplayName))]
+    [Authorize]
+    public async Task<string> SetDisplayName([FromBody] SetDisplayNameRequest request)
+    {
+        var requestUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (requestUserId == null) return "None";
+        
+        request.UserId = requestUserId;
+        string displayName = await dService.SetDisplayName(request);
+        await commandSender.SendDisplayNameCommand(request.DeviceId, displayName);
+        return displayName;
     }
 }
