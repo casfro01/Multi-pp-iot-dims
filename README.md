@@ -64,7 +64,7 @@ npm install
 npm run dev
 ```
 
-## Quiz Runtime Flow (High-Level)
+## Quiz Runtime Flow
 
 1. Host creates a lobby and gets a PIN.
 2. Devices join with that PIN.
