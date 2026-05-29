@@ -175,3 +175,35 @@
     transform: scale(1) translateY(0);
   }
 }
+
+/* ── Back button ── */
+.lobby-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border-radius: 10px;
+    border-color: #3A1A5C;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+    padding: 10px;
+    margin-bottom: 2rem;
+    margin-left: -175%;
+    transition: color 0.2s;
+    animation: scores-fadeUp 0.5s 0.05s both;
+}
+
+.lobby-back:hover {
+    color: var(--color-secondary);
+}
+
+.lobby-back__arrow {
+    font-size: 1rem;
+    transition: transform 0.2s;
+}
+
+.lobby-back:hover .lobby-back__arrow {
+    transform: translateX(-3px);
+}
