@@ -22,6 +22,7 @@ import {
   sseClientAtom,
 } from '../../../core/atoms/lobby'
 import './QuizPage.css'
+import {categories, lobby} from "../pages.ts";
 
 function mapButtonEventToAnswer(raw: any): AnswerRequest | null {
   const deviceId = raw?.deviceId ?? raw?.DeviceId ?? raw?.DeviceID
@@ -75,7 +76,7 @@ function QuizPage() {
 
   useEffect(() => {
     if (!pinCode || !sseClient || !selectedQuiz?.id) {
-      navigate('/categories', { replace: true })
+      navigate(categories, { replace: true })
     }
   }, [pinCode, sseClient, selectedQuiz, navigate])
 
@@ -144,7 +145,7 @@ function QuizPage() {
     setCurrentIndex((i) => i + 1)
   }
 
-  const handleBackToLobby = () => navigate('/lobby')
+  const handleBackToLobby = () => navigate(lobby)
 
   const total = quiz?.questions?.length ?? 0
   const currentQuestionId = currentQuestion?.id

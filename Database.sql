@@ -53,3 +53,18 @@ create table quiz.user_device_link
     device_id     text NOT NULL UNIQUE,
     display_name text NOT NULL
 );
+
+create table quiz.score_log(
+    id integer not null
+       generated always as identity
+       constraint socre_log_pk primary key,
+    device_id TEXT NOT NULL,
+    quiz_id INTEGER NOT NULL
+        constraint questions_questions_id_fk
+        references quiz.quiz(id) ON DELETE CASCADE,
+    question_id INTEGER NOT NULL
+        constraint answers_answers_id_fk
+        references quiz.questions(id) ON DELETE CASCADE,
+    correct BOOLEAN NOT NULL,
+    date_time TIMESTAMP WITH TIME ZONE NOT NULL,
+);

@@ -3,13 +3,13 @@ import LandingPage from "./pages/Frontpage/ChoosePage.tsx";
 import {Toaster} from "react-hot-toast";
 import SignInPage from "./pages/Frontpage/SignInPage/SignInPage.tsx";
 import SignUpPage from "./pages/Frontpage/SignUpPage/SignUpPage.tsx";
-import DisplayFormattedDeviceConnection from "./pages/Frontpage/DisplayFormattedDeviceConnection.tsx";
 import CategoryPage from "./pages/CategoryPage/CategoryPage.tsx";
 import LobbyPage from "./pages/LobbyPage/LobbyPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import LinkDevice from "./pages/LinkDevicePage/LinkDevice.tsx";
 import MainPage from "./pages/MainPage/MainPage.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import {categories, linkdevice, lobby, main, quiz, signin, signup, start} from "./pages/pages.ts";
 
 function App() {
   return (
@@ -19,43 +19,39 @@ function App() {
           <RouterProvider
               router={createBrowserRouter([
                   {
-                      path: "/",
+                      path: start,
                       element: <Outlet />,
                       children: [
                           {
-                              path: "/",
+                              path: start,
                               element: <LandingPage/>,
                           },
                           {
-                              path: "/signin",
+                              path: signin,
                               element: <SignInPage/>,
                           },
                           {
-                              path: "/signup",
+                              path: signup,
                               element: <SignUpPage/>
                           },
                           {
-                              path: "/linkdevice",
+                              path: linkdevice,
                               element: <ProtectedRoute><LinkDevice/></ProtectedRoute>
                           },
                           {
-                              path: "/main",
+                              path: main,
                               element: <ProtectedRoute><MainPage/></ProtectedRoute>
                           },
                           {
-                              path: "/temp",
-                              element: <ProtectedRoute><DisplayFormattedDeviceConnection/></ProtectedRoute>
-                          },
-                          {
-                            path: "/categories",
+                            path: categories,
                             element: <ProtectedRoute><CategoryPage/></ProtectedRoute>
                           },
                         {
-                              path: "/lobby",
+                              path: lobby,
                               element: <ProtectedRoute><LobbyPage/></ProtectedRoute>
                           },
                           {
-                              path: "/quiz",
+                              path: quiz,
                               element: <ProtectedRoute><QuizPage/></ProtectedRoute>
                           },
                       ],

@@ -5,6 +5,7 @@ import {useAtom} from "jotai";
 import {tokenAtom} from "../../../core/atoms/token.ts";
 import {mapToPairingPayload, type PairingPayload} from "../../../core/Types/PairingPayload.ts";
 import {useNavigate} from "react-router";
+import {main} from "../pages.ts";
 
 
 export type Step = 'name' | 'code' | 'success'
@@ -45,7 +46,7 @@ export const useLinkDevicePage = () => {
             console.log(error);
             setState(s => ({...s, loading: false, error: "Something happend. booo hooo."}));
         }
-        navigator("/main")
+        navigator(main)
     };
     // set display name -> which should update the state, which should call an useEffect to fetch a code
     const handleNameSubmit = async (displayName: string) => {

@@ -2,3 +2,7 @@ export const start = "/";
 export const signin = "/signin";
 export const signup = "/signup";
 export const main = "/main";
+export const linkdevice = "/linkdevice";
+export const categories = "/categories";
+export const lobby  = "/lobby";
+export const quiz = "/quiz";

@@ -231,6 +231,57 @@
         }
       }
     },
+    "/api/Score/GetScore": {
+      "get": {
+        "tags": [
+          "Score"
+        ],
+        "operationId": "Score_GetScore",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Score"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Score/SaveRound": {
+      "post": {
+        "tags": [
+          "Score"
+        ],
+        "operationId": "Score_SaveRound",
+        "requestBody": {
+          "x-name": "scores",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/NewScoreDto"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/Subscriber/sse": {
       "get": {
         "tags": [
@@ -521,6 +572,49 @@
           "content": {
             "type": "string",
             "minLength": 1
+          }
+        }
+      },
+      "Score": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          },
+          "quizName": {
+            "type": "string"
+          },
+          "correct": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "answerRate": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "NewScoreDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "deviceId": {
+            "type": "string"
+          },
+          "quizId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "questionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "correct": {
+            "type": "boolean"
           }
         }
       }

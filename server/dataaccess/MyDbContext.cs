@@ -16,6 +16,8 @@ public partial class MyDbContext : DbContext
 
     public virtual DbSet<Quiz> Quizzes { get; set; }
 
+    public virtual DbSet<ScoreLog> ScoreLogs { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UserDeviceLink> UserDeviceLinks { get; set; }
@@ -67,6 +69,30 @@ public partial class MyDbContext : DbContext
                 .UseIdentityAlwaysColumn()
                 .HasColumnName("id");
             entity.Property(e => e.Name).HasColumnName("name");
+        });
+
+        modelBuilder.Entity<ScoreLog>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("socre_log_pk");
+
+            entity.ToTable("score_log", "quiz");
+
+            entity.Property(e => e.Id)
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("id");
+            entity.Property(e => e.Correct).HasColumnName("correct");
+            entity.Property(e => e.DateTime).HasColumnName("date_time");
+            entity.Property(e => e.DeviceId).HasColumnName("device_id");
+            entity.Property(e => e.QuestionId).HasColumnName("question_id");
+            entity.Property(e => e.QuizId).HasColumnName("quiz_id");
+
+            entity.HasOne(d => d.Question).WithMany(p => p.ScoreLogs)
+                .HasForeignKey(d => d.QuestionId)
+                .HasConstraintName("answers_answers_id_fk");
+
+            entity.HasOne(d => d.Quiz).WithMany(p => p.ScoreLogs)
+                .HasForeignKey(d => d.QuizId)
+                .HasConstraintName("questions_questions_id_fk");
         });
 
         modelBuilder.Entity<User>(entity =>
