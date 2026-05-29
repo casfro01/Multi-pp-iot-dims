@@ -606,6 +606,7 @@ export interface NewScoreDto {
     deviceId?: string;
     quizId?: number;
     questionId?: number;
+    lobbyCode?: string;
     correct?: boolean;
 }
 

@@ -9,7 +9,8 @@ import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import LinkDevice from "./pages/LinkDevicePage/LinkDevice.tsx";
 import MainPage from "./pages/MainPage/MainPage.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
-import {categories, linkdevice, lobby, main, quiz, signin, signup, start} from "./pages/pages.ts";
+import {categories, linkdevice, lobby, main, quiz, scores, signin, signup, start} from "./pages/pages.ts";
+import ScoresPage from "./pages/ScorePage/ScorePage.tsx";
 
 function App() {
   return (
@@ -53,6 +54,10 @@ function App() {
                           {
                               path: quiz,
                               element: <ProtectedRoute><QuizPage/></ProtectedRoute>
+                          },
+                          {
+                              path: scores,
+                              element: <ScoresPage/>
                           },
                       ],
                   },

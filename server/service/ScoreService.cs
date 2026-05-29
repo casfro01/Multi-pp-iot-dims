@@ -10,29 +10,40 @@ public class ScoreService(MyDbContext ctx) : IScoreService
     public async Task<List<Score>> GetScores(string userId, int amount)
     {
         var user = await ctx.Users.Include(u => u.UserDeviceLinks).FirstOrDefaultAsync(x => x.Id == userId);
+        var udl = user.UserDeviceLinks.Select(d => d.DeviceId).ToList();
         if (user == null || user.UserDeviceLinks.Count == 0) throw new ValidationException("Don't have a device");
         
-        var udl = user.UserDeviceLinks.Select(d => d.DeviceId).ToList();
-
-        var scores = await ctx.ScoreLogs
+        var raw = await ctx.ScoreLogs
             .Where(d => udl.Contains(d.DeviceId))
             .GroupBy(sc => new
             {
+                sc.LobbyCode,
                 sc.QuizId,
                 sc.DeviceId,
-                QuizName = sc.Quiz.Name,
-                sc.DateTime
+                QuizName = sc.Quiz.Name
             })
-            .Select(g => new Score(
+            .Select(g => new
+            {
                 g.Key.DeviceId,
-                g.Key.QuizName ?? "None",
-                g.Count(x => x.Correct),
-                g.Count(x => x.Correct) + "/" + g.First().Quiz.Questions.Count,
-                g.Max(x => x.DateTime)
-            ))
-            .OrderByDescending(sc => sc.Time)
-            .Take(amount)
+                g.Key.QuizId,
+                g.Key.QuizName,
+                Correct = g.Count(x => x.Correct),
+                Total = g.Count(),
+                LastTime = g.Max(x => x.DateTime)
+            })
             .ToListAsync();
+        
+        var scores = raw
+            .Select(x => new Score(
+                x.DeviceId,
+                x.QuizName ?? "None",
+                x.Correct,
+                $"{x.Correct}/{x.Total}",
+                x.LastTime
+            ))
+            .OrderByDescending(x => x.Time)
+            .Take(amount)
+            .ToList();
         return scores;
     }
 
@@ -48,6 +59,7 @@ public class ScoreService(MyDbContext ctx) : IScoreService
             Correct = score.correct,
             DateTime = DateTime.UtcNow,
             DeviceId = score.deviceId,
+            LobbyCode = score.lobbyCode,
             Question = ans,
             QuestionId = score.questionId,
             Quiz = quiz

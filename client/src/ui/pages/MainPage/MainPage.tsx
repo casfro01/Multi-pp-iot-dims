@@ -22,8 +22,8 @@ export default function MainPage() {
                 <div className="mp-card">
 
                     <div className="mp-brand">
-                        <div className="mp-brand__mark">K</div>
-                        <span className="mp-brand__name">Kahoot!</span>
+                        <div className="mp-brand__mark">Q</div>
+                        <span className="mp-brand__name">Quizora!</span>
                     </div>
 
                     <h1 className="mp-heading">What's next?</h1>

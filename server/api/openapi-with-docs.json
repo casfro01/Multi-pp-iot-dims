@@ -613,6 +613,9 @@
             "type": "integer",
             "format": "int32"
           },
+          "lobbyCode": {
+            "type": "string"
+          },
           "correct": {
             "type": "boolean"
           }
