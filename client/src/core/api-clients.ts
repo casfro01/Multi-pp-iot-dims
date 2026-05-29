@@ -1,4 +1,4 @@
-﻿import {AuthClient, CommandSenderClient, QuizClient, SubscriberClient} from "./ServerAPI.ts"
+﻿import {AuthClient, CommandSenderClient, QuizClient, ScoreClient, SubscriberClient} from "./ServerAPI.ts"
 import {TOKEN_KEY, tokenStorage} from "./atoms/token.ts";
 
 
@@ -24,3 +24,4 @@ export const authClient = new AuthClient(baseUrl, { fetch: customFetch });
 export const subClient = new SubscriberClient(baseUrl, { fetch: customFetch });
 export const quizClient = new QuizClient(baseUrl, { fetch: customFetch });
 export const commandSenderClient = new CommandSenderClient(baseUrl, { fetch: customFetch });
+export const scoreClient = new ScoreClient(baseUrl, { fetch: customFetch });

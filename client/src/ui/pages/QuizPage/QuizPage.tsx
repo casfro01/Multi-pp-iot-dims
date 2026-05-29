@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 import { useAtom } from 'jotai'
 import { ANSWER_VARIANTS, ANSWER_SHAPES } from '../../answerStyles'
 import { commandSenderClient, quizClient, subClient } from '../../../core/api-clients'
-import { LightCommands } from '../../../core/ServerAPI'
+import {LightCommands, type NewScoreDto} from '../../../core/ServerAPI'
 import type {
   BaseAnswerResponse,
   BaseQuestionResponse,
@@ -23,6 +23,7 @@ import {
 } from '../../../core/atoms/lobby'
 import './QuizPage.css'
 import {categories, lobby} from "../pages.ts";
+import {saveScores} from "../../../utils/saveQuiz.ts";
 
 function mapButtonEventToAnswer(raw: any): AnswerRequest | null {
   const deviceId = raw?.deviceId ?? raw?.DeviceId ?? raw?.DeviceID
@@ -197,7 +198,12 @@ function QuizPage() {
       }),
     ).catch(() => {
       // Ignore blink errors to keep quiz flow running.
-    })
+    });
+    const lst = tally.map((reply) => { return {deviceId: reply.deviceId,
+        correct: normalizeAnswer(reply.answer) === correctAnswerIndex,
+        questionId: currentQuestionId,
+        quizId: quiz?.id} as NewScoreDto });
+    saveScores(lst).then(/* nothing*/);
   }, [
     allPlayersAnswered,
     correctAnswerIndex,

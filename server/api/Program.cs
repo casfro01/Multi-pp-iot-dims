@@ -41,6 +41,7 @@ public class Program
         services.AddScoped<IQuizService, QuizService>(); 
         services.AddScoped<IPasswordHasher<User>, NSecArgon2IdPasswordHasher>();
         services.AddScoped<IDisplayNameService, DisplayNameService>();
+        services.AddScoped<IScoreService, ScoreService>();
         
         services.AddScoped<IPublisher<PairingRequest>, DeviceListener>();
         services.AddScoped<IPublisher<AnswerRequest>, QuizAnswerListener>();
