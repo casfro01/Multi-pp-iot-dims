@@ -1,4 +1,4 @@
-﻿import './auth.css';
+﻿import './Auth.css';
 import '../../colors.css';
 import {useNavigate} from "react-router";
 import {signin, signup} from "../pages.ts";

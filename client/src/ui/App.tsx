@@ -9,6 +9,7 @@ import LobbyPage from "./pages/LobbyPage/LobbyPage.tsx";
 import QuizPage from "./pages/QuizPage/QuizPage.tsx";
 import LinkDevice from "./pages/LinkDevicePage/LinkDevice.tsx";
 import MainPage from "./pages/MainPage/MainPage.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
 
 function App() {
   return (
@@ -35,27 +36,27 @@ function App() {
                           },
                           {
                               path: "/linkdevice",
-                              element: <LinkDevice/>
+                              element: <ProtectedRoute><LinkDevice/></ProtectedRoute>
                           },
                           {
                               path: "/main",
-                              element: <MainPage/>
+                              element: <ProtectedRoute><MainPage/></ProtectedRoute>
                           },
                           {
                               path: "/temp",
-                              element: <DisplayFormattedDeviceConnection/>
+                              element: <ProtectedRoute><DisplayFormattedDeviceConnection/></ProtectedRoute>
                           },
                           {
                             path: "/categories",
-                            element: <CategoryPage/>
+                            element: <ProtectedRoute><CategoryPage/></ProtectedRoute>
                           },
                         {
                               path: "/lobby",
-                              element: <LobbyPage/>,
+                              element: <ProtectedRoute><LobbyPage/></ProtectedRoute>
                           },
                           {
                               path: "/quiz",
-                              element: <QuizPage/>,
+                              element: <ProtectedRoute><QuizPage/></ProtectedRoute>
                           },
                       ],
                   },
