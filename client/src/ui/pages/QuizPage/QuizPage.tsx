@@ -202,7 +202,7 @@ function QuizPage() {
     const lst = tally.map((reply) => { return {deviceId: reply.deviceId,
         correct: normalizeAnswer(reply.answer) === correctAnswerIndex,
         questionId: currentQuestionId,
-        quizId: quiz?.id, 
+        quizId: quiz?.id,
         lobbyCode: pinCode} as NewScoreDto });
     saveScores(lst).then(/* nothing*/);
   }, [

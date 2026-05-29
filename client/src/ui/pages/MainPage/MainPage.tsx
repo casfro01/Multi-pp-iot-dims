@@ -1,5 +1,6 @@
 import './Main.css'
 import {useNavigate} from "react-router";
+import {categories, linkdevice, scores} from "../pages.ts";
 
 function Background() {
     return (
@@ -32,7 +33,7 @@ export default function MainPage() {
                     <div className="mp-actions">
                         <button
                             className="mp-btn mp-btn--primary"
-                            onClick={() => navigate('/categories')}
+                            onClick={() => navigate(categories)}
                         >
                             <div className="mp-btn__left">
                                 <span className="mp-btn__icon">🎯</span>
@@ -46,7 +47,7 @@ export default function MainPage() {
 
                         <button
                             className="mp-btn"
-                            onClick={() => navigate('/linkdevice')}
+                            onClick={() => navigate(linkdevice)}
                         >
                             <div className="mp-btn__left">
                                 <span className="mp-btn__icon">📺</span>
@@ -57,10 +58,24 @@ export default function MainPage() {
                             </div>
                             <span className="mp-btn__arrow">→</span>
                         </button>
+
+                        <button
+                            className="mp-btn"
+                            onClick={() => navigate(scores)}
+                        >
+                            <div className="mp-btn__left">
+                                <span className="mp-btn__icon">🦅</span>
+                                <div className="mp-btn__label">
+                                    <span className="mp-btn__title">Scores</span>
+                                    <span className="mp-btn__desc">View your score history</span>
+                                </div>
+                            </div>
+                            <span className="mp-btn__arrow">→</span>
+                        </button>
                     </div>
+                </div>
 
                 </div>
-            </div>
         </>
     )
 }
