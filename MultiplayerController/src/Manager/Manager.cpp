@@ -22,7 +22,7 @@ Manager::Manager() :
                 19, 23, 18, 
                 // channels
                 9, 10, 11),
-            ledController(nullptr, 4),
+            ledController(nullptr, 3),
             buttonController(39, 34, 36, 35),
             lcdController(21, 22)
 {
