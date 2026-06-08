@@ -85,6 +85,7 @@ public partial class MyDbContext : DbContext
             entity.Property(e => e.DeviceId).HasColumnName("device_id");
             entity.Property(e => e.QuestionId).HasColumnName("question_id");
             entity.Property(e => e.QuizId).HasColumnName("quiz_id");
+            entity.Property(e => e.LobbyCode).HasColumnName("lobbycode");
 
             entity.HasOne(d => d.Question).WithMany(p => p.ScoreLogs)
                 .HasForeignKey(d => d.QuestionId)

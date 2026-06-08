@@ -6,3 +6,4 @@ export const linkdevice = "/linkdevice";
 export const categories = "/categories";
 export const lobby  = "/lobby";
 export const quiz = "/quiz";
+export const scores = "/scores";

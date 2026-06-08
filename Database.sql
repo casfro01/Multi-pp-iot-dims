@@ -66,5 +66,6 @@ create table quiz.score_log(
         constraint answers_answers_id_fk
         references quiz.questions(id) ON DELETE CASCADE,
     correct BOOLEAN NOT NULL,
-    date_time TIMESTAMP WITH TIME ZONE NOT NULL,
+    lobbyCode TEXT NOT NULL,
+    date_time TIMESTAMP WITH TIME ZONE NOT NULL
 );

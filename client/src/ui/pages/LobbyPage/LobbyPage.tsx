@@ -14,6 +14,7 @@ import {
 import type { BaseQuizResponse } from '../../../core/ServerAPI'
 import './LobbyPage.css'
 import {mapToPairingPayload, type PairingPayload} from "../../../core/Types/PairingPayload.ts";
+import {main, quiz} from "../pages.ts";
 
 function parsePinCode(code: string | undefined): number[] {
   if (!code) return []
@@ -64,13 +65,20 @@ function LobbyPage() {
   }, [token, sseClient, setSseClient, setPinCode, setPlayers])
 
   const handleStart = () => {
-    navigate('/quiz')
+    navigate(quiz)
   }
+
+  const onBack = () => navigate(main)
 
   return (
     <div className="lobby-page">
       <div className="lobby-page__container">
         <div className="lobby-pin">
+            {/* Back */}
+            <button className="lobby-back" onClick={onBack} type="button">
+                <span className="lobby-back__arrow">←</span>
+                Back to main
+            </button>
           <span className="lobby-pin__label">Game PIN</span>
           <div className="lobby-pin__code" aria-label="Color pin code">
             {pinTiles.map((idx, i) => (

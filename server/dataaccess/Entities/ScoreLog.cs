@@ -6,6 +6,8 @@ public partial class ScoreLog
 
     public string DeviceId { get; set; } = null!;
 
+    public string LobbyCode { get; set; } = null!;
+
     public int QuizId { get; set; }
 
     public int QuestionId { get; set; }
